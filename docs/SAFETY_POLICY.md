@@ -35,6 +35,8 @@ SoloForge should:
 - default to backups before writing configs or saves
 - make local user-created trainers private unless the user explicitly exports them
 - avoid calling platform achievement APIs or changing achievement-disabled flags
+- allow custom game drafts only when the user marks the target as offline singleplayer
+- block custom drafts when the user marks the target as strictly multiplayer
 
 ## Process Attachment Rules
 

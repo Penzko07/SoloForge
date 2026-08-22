@@ -9,6 +9,7 @@ The repository starts with policies, registry records, importers, tests, and a s
 Key paths:
 
 - `apps/desktop`: browser UI
+- `apps/electron`: Windows/Linux desktop shell and native scanner
 - `apps/macos`: native macOS wrapper
 - `registry`: normalized source and game metadata
 - `tools`: scanners, importers, publishing, and build scripts
@@ -28,9 +29,25 @@ The UI supports:
 - registry overview
 - source attribution
 - installed-game scan import
-- native macOS scan bridge
+- native scan bridge for Electron and macOS
 - mock trainer-builder flow
 - offline/singleplayer safety messaging
+
+## Windows/Linux App
+
+The Windows and Linux builds use Electron. The app loads the shared desktop UI and exposes a narrow `window.soloforgeNative.scanInstalledGames()` bridge from `apps/electron/preload.cjs`.
+
+The bridge calls `apps/electron/scanner.cjs`, a dependency-free Node scanner that reads launcher metadata from local files and common mounted-drive locations.
+
+Build commands:
+
+```bash
+npm install
+npm run dist:win
+npm run dist:linux
+```
+
+GitHub Actions uploads `SoloForge-windows` and `SoloForge-linux` artifacts on `main`. Tagged releases attach the desktop packages to the Release page.
 
 ## Native macOS App
 
@@ -64,11 +81,16 @@ This means SoloForge can show:
 
 - source URL
 - feature name
+- draft value-finder template
 - store IDs
 - safety status
 - attribution text
 
 It does not bundle third-party cheat tables until license and safety review allow it.
+
+## Custom Cheats
+
+The builder can save local drafts for any custom offline singleplayer game name. A strictly multiplayer checkbox blocks draft creation for games outside SoloForge's scope.
 
 ## GitHub Publishing
 

@@ -6,22 +6,52 @@ SoloForge is built with AI assistance from OpenAI Codex. The project attributes 
 
 ## What Works Now
 
+- Windows-focused Electron desktop app packaging
+- Linux Electron desktop app packaging
 - static desktop-style web MVP in `apps/desktop`
 - normalized registry records in `registry`
 - source attribution and license status tracking
 - safety policy and source policy
 - Python registry validator
 - local launcher scanner for Steam plus experimental GOG, Ubisoft Connect, and EA App metadata
+- dependency-free Electron scanner for Windows/Linux installed-game detection
 - native macOS app wrapper with a local scanner bridge
 - Steam library coverage importer for public/exported library data
 - local HTTP server for Chrome/browser testing
 - GitHub API publish helper for machines where normal `git push` has no HTTPS credentials
 - GitHub metadata importer scaffold
-- GitHub Actions workflow for registry checks
-- mock trainer-builder flow that models value scanning without attaching to real processes
+- GitHub Actions workflow for registry checks and desktop package artifacts
+- mock trainer-builder flow that models value scanning and custom singleplayer drafts without attaching to real processes
 
-SoloForge is not a notarized public installer yet. It can now be built as a
-local macOS `.app`, and the original browser UI still works.
+SoloForge is not code-signed by a commercial certificate yet. Windows and Linux
+packages are built by GitHub Actions. The original browser UI and local macOS
+wrapper still work.
+
+## Download The App
+
+Windows is the primary target.
+
+On GitHub, open the latest successful `Validate` workflow run and download:
+
+- `SoloForge-windows`: Windows installer and portable executable
+- `SoloForge-linux`: AppImage and Debian package
+- `SoloForge-macos`: lightweight macOS app bundle
+
+Tagged releases also publish Windows and Linux assets on the Release page.
+
+Build locally on Windows:
+
+```powershell
+npm install
+npm run dist:win
+```
+
+Build locally on Linux:
+
+```bash
+npm install
+npm run dist:linux
+```
 
 Build the macOS app:
 
@@ -30,7 +60,7 @@ bash tools/build_macos_app.sh
 open build/macos/SoloForge.app
 ```
 
-Open the MVP directly:
+Open the browser UI directly:
 
 ```text
 apps/desktop/index.html
@@ -42,7 +72,7 @@ Or serve it locally for Chrome:
 python3 tools/serve_desktop_app.py --open
 ```
 
-No build step is required for the first milestone.
+See `docs/WINDOWS_APP.md`, `docs/LINUX_APP.md`, and `docs/RUNNING_LOCALLY.md`.
 
 ## Mission
 
@@ -51,7 +81,7 @@ SoloForge helps players customize offline singleplayer games they own. The proje
 - discovering installed singleplayer games
 - indexing public/open-source game-assist resources
 - managing safe local tweaks such as configs, mods, saves, and profiles
-- helping users build local trainers through transparent reviewable workflows
+- helping users build local trainers and custom singleplayer drafts through transparent reviewable workflows
 - documenting every source and license status
 
 ## Hard Rules
@@ -68,6 +98,8 @@ SoloForge helps players customize offline singleplayer games they own. The proje
 ```text
 .github/workflows/       CI checks
 apps/desktop/            static MVP app
+apps/electron/           Windows/Linux app shell and Node scanner
+apps/macos/              lightweight macOS app shell
 docs/                    policies and architecture notes
 packages/importers/      importer implementation notes and source
 packages/registry-schema canonical registry schema
@@ -113,6 +145,9 @@ python3 tools/scan_installed_games.py --drive-root "D:\" --pretty
 
 Then open `apps/desktop/index.html`, go to `Installed`, and import the generated JSON file.
 
+The Windows/Linux Electron app can run its own installed-game scanner from the
+`Installed` view with `Scan this PC`.
+
 Steam detection is the most complete scanner. GOG, Ubisoft Connect, and EA App
 support is best-effort metadata parsing and should be expanded as contributors
 verify more real launcher formats. The all-drives mode checks common launcher
@@ -134,6 +169,19 @@ python3 tools/import_steam_library.py --steamdb-html steamdb-calculator.html --p
 
 The importer matches library games to existing SoloForge registry metadata. It
 does not download or bundle third-party cheat tables.
+
+## Custom Singleplayer Cheats
+
+The builder can save local draft cheat definitions for:
+
+- known registry games
+- custom game names entered by the user
+
+Drafts are always marked offline-only and singleplayer-only. If a game is
+strictly multiplayer, the builder blocks the draft.
+
+The current builder is still a mock value scanner; it does not attach to real
+processes yet. A future native helper must keep the same safety gates.
 
 ## Achievements
 
@@ -162,6 +210,7 @@ store the token.
 ```bash
 python3 tools/validate_registry.py
 python3 -m unittest discover -s tests
+npm run check:js
 bash tools/build_macos_app.sh
 ```
 

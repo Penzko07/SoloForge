@@ -159,6 +159,19 @@ button {
   padding: 0 12px;
 }
 
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+}
+
+.check-row input {
+  width: 18px;
+  min-height: 18px;
+  accent-color: var(--green-strong);
+}
+
 .search input:focus,
 .builder input:focus,
 .builder select:focus {

@@ -36,7 +36,7 @@
       <main class="main">
         <header class="toolbar">
           <div>
-            <p class="eyebrow">Registry MVP</p>
+            <p class="eyebrow">Desktop Preview</p>
             <h2 id="view-title">Overview</h2>
           </div>
           <label class="search">
@@ -72,7 +72,7 @@
               <h3 id="installed-heading">Installed Games</h3>
             </div>
             <div class="button-row">
-              <button id="native-scan" class="secondary">Scan this Mac</button>
+              <button id="native-scan" class="secondary">Scan this PC</button>
               <label class="file-button">
                 Import scan
                 <input id="installed-import" type="file" accept="application/json,.json">
@@ -117,13 +117,21 @@
         <section id="builder-view" class="view" aria-labelledby="builder-heading">
           <div class="section-head">
             <h3 id="builder-heading">Trainer Builder</h3>
-            <span class="pill pill-warn">Mock helper</span>
+            <span class="pill pill-warn">Draft mode</span>
           </div>
           <div class="builder">
             <section class="builder-step">
               <label>
                 Game
                 <select id="builder-game"></select>
+              </label>
+              <label>
+                Custom game
+                <input id="custom-game" type="text" placeholder="Optional singleplayer game name">
+              </label>
+              <label class="check-row">
+                <input id="custom-multiplayer" type="checkbox">
+                Strictly multiplayer
               </label>
               <label>
                 Value type

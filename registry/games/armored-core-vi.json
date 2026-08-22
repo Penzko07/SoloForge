@@ -24,6 +24,27 @@
       "offlineOnly": true,
       "safetyStatus": "requiresManualReview",
       "notes": "Metadata-only link. Any future trainer support must be offline singleplayer only."
+    },
+    {
+      "name": "COAM value finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for narrowing currency values in offline sortie/prep flow."
+    },
+    {
+      "name": "Ammo value finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for offline mission resource values."
+    },
+    {
+      "name": "Save backup before tuning",
+      "type": "save-tool",
+      "offlineOnly": true,
+      "safetyStatus": "safe",
+      "notes": "Create a local save backup before manual table or value-editing work."
     }
   ],
   "safety": {

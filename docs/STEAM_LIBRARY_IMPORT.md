@@ -12,6 +12,8 @@ python3 tools/import_steam_library.py --steam-id 76561198108903649 --pretty --ou
 
 This uses Steam Community's public games XML page. It works only when the profile and game details are public and the network can reach Steam.
 
+Steam may redirect this endpoint to login when profile/game privacy, region, cookies, or Steam-side access rules prevent anonymous access. In that case, use a local installed-game scan from the Windows gaming PC or save an authenticated/exported library page and import that file.
+
 ## SteamDB Calculator Export
 
 If SteamDB is easier to view in a browser, save the calculator page HTML and import it:

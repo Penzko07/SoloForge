@@ -18,6 +18,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Validate registry
         run: python3 tools/validate_registry.py
 
@@ -28,12 +33,19 @@ jobs:
         run: python3 -m py_compile tools/*.py
 
       - name: Check desktop JavaScript syntax
-        run: node --check apps/desktop/app.js
+        run: |
+          node --check apps/desktop/app.js
+          node --check apps/electron/main.cjs
+          node --check apps/electron/preload.cjs
+          node --check apps/electron/scanner.cjs
 
       - name: Verify generated desktop data
         run: |
           python3 tools/update_app_data.py
           git diff --exit-code apps/desktop/app-data.js
+
+      - name: Validate package metadata
+        run: node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
 
   macos-app:
     runs-on: macos-latest
@@ -52,3 +64,46 @@ jobs:
         with:
           name: SoloForge-macos
           path: build/macos/SoloForge-macos.zip
+
+  desktop-installers:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+            command: npm run dist:win -- --publish never
+            artifact: SoloForge-windows
+          - name: Linux
+            os: ubuntu-latest
+            command: npm run dist:linux -- --publish never
+            artifact: SoloForge-linux
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install desktop dependencies
+        run: npm install
+
+      - name: Build installer
+        run: ${{ matrix.command }}
+
+      - name: Upload desktop artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/SoloForge-*

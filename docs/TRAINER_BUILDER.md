@@ -6,11 +6,13 @@ SoloForge should let players create local trainer definitions for offline single
 
 The desktop app includes a mock value scanner. It demonstrates:
 
+- known registry games and custom singleplayer game names
 - first scan
 - changed-value scan
 - candidate narrowing
 - local draft creation
 - offline-only warnings
+- strictly multiplayer blocking
 
 It does not attach to a real process.
 
@@ -43,6 +45,9 @@ Required blockers:
   "name": "Money Editor",
   "gameId": "example-game",
   "offlineOnly": true,
+  "singleplayerOnly": true,
+  "multiplayerBlocked": true,
+  "achievementCompatibility": "neutral-by-policy",
   "createdBy": "local-user",
   "storage": "local-only",
   "scan": {

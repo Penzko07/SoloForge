@@ -182,7 +182,7 @@ function renderInstalled() {
     $("#installed-list").innerHTML = `
       <div class="panel">
         <h4>No scan imported</h4>
-        <p>Import a launcher scan JSON file, or run the native scanner from the macOS app.</p>
+        <p>Import a launcher scan JSON file, or run the native scanner from the Windows, Linux, or macOS app.</p>
       </div>
     `;
     return;
@@ -242,17 +242,36 @@ async function importInstalledScan(file) {
 }
 
 function nativeBridge() {
-  return window.webkit?.messageHandlers?.soloforge;
+  return window.soloforgeNative || window.webkit?.messageHandlers?.soloforge;
 }
 
-function requestNativeScan() {
+function nativePlatformLabel() {
+  const platform = window.soloforgeNative?.platform;
+  if (platform === "win32") return "Windows PC";
+  if (platform === "linux") return "Linux PC";
+  if (platform === "darwin") return "Mac";
+  return "PC";
+}
+
+async function requestNativeScan() {
   const bridge = nativeBridge();
   if (!bridge) {
-    $("#installed-status").textContent = "Native scanner is available in the macOS app build.";
+    $("#installed-status").textContent = "Native scanner is available in the Windows, Linux, and macOS app builds.";
     return;
   }
   state.nativeScanActive = true;
-  $("#installed-status").textContent = "Scanning local launcher metadata...";
+  $("#installed-status").textContent = `Scanning local launcher metadata on this ${nativePlatformLabel()}...`;
+
+  if (window.soloforgeNative?.scanInstalledGames) {
+    try {
+      const result = await window.soloforgeNative.scanInstalledGames();
+      handleNativeScan({ detail: result });
+    } catch (error) {
+      handleNativeScan({ detail: { ok: false, error: error.message || String(error) } });
+    }
+    return;
+  }
+
   bridge.postMessage({ type: "scanInstalledGames" });
 }
 
@@ -272,9 +291,10 @@ function handleNativeScan(event) {
 }
 
 function renderBuilderSelect() {
-  $("#builder-game").innerHTML = registry.games
-    .map((game) => `<option value="${escapeHtml(game.id)}">${escapeHtml(game.name)}</option>`)
-    .join("");
+  $("#builder-game").innerHTML = [
+    `<option value="">Custom offline game</option>`,
+    ...registry.games.map((game) => `<option value="${escapeHtml(game.id)}">${escapeHtml(game.name)}</option>`),
+  ].join("");
 }
 
 function makeCandidates(value, valueType) {
@@ -322,11 +342,24 @@ function narrowScan() {
 function saveDraft() {
   const gameId = $("#builder-game").value;
   const game = registry.games.find((item) => item.id === gameId);
+  const customName = $("#custom-game").value.trim();
+  const strictlyMultiplayer = $("#custom-multiplayer").checked;
+  if (strictlyMultiplayer) {
+    $("#scan-status").textContent = "Blocked: strictly multiplayer games are outside SoloForge.";
+    return;
+  }
+  if (!game && !customName) {
+    $("#scan-status").textContent = "Choose a registry game or enter a custom singleplayer game.";
+    return;
+  }
   const draft = {
     name: "Local Value Editor",
-    gameId,
-    gameName: game?.name || gameId,
+    gameId: gameId || null,
+    gameName: game?.name || customName,
     offlineOnly: true,
+    singleplayerOnly: true,
+    multiplayerBlocked: true,
+    achievementCompatibility: "neutral-by-policy",
     storage: "local-only",
     valueType: $("#value-type").value,
     candidates: state.candidates.slice(0, 4),

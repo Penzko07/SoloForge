@@ -1,0 +1,70 @@
+{
+  "name": "soloforge",
+  "version": "0.2.0",
+  "description": "Offline singleplayer game tuning, mod management, and trainer creation.",
+  "author": "Penzko07 with OpenAI Codex",
+  "license": "GPL-3.0-or-later",
+  "private": false,
+  "main": "apps/electron/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "build:app-data": "python tools/update_app_data.py",
+    "check:js": "node --check apps/desktop/app.js && node --check apps/electron/main.cjs && node --check apps/electron/preload.cjs && node --check apps/electron/scanner.cjs",
+    "dist:win": "npm run build:app-data && electron-builder --win nsis portable",
+    "dist:linux": "npm run build:app-data && electron-builder --linux AppImage deb"
+  },
+  "devDependencies": {
+    "electron": "^32.3.3",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "dev.penzko07.soloforge",
+    "productName": "SoloForge",
+    "artifactName": "SoloForge-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "apps/desktop/**/*",
+      "apps/electron/**/*",
+      "registry/**/*",
+      "docs/**/*",
+      "README.md",
+      "LICENSE",
+      "NOTICE.md",
+      "SECURITY.md"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SoloForge"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Game"
+    }
+  }
+}

@@ -24,6 +24,27 @@
       "offlineOnly": true,
       "safetyStatus": "requiresManualReview",
       "notes": "Metadata-only record. Redistribution blocked until license review."
+    },
+    {
+      "name": "Gold value finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for narrowing current gold in a local run."
+    },
+    {
+      "name": "Health value finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for singleplayer health values."
+    },
+    {
+      "name": "Save backup before tuning",
+      "type": "save-tool",
+      "offlineOnly": true,
+      "safetyStatus": "safe",
+      "notes": "Create a local save backup before manual table or value-editing work."
     }
   ],
   "safety": {

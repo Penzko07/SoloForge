@@ -9,12 +9,16 @@ Desktop UI
   reads generated registry snapshot
   shows source attribution and safety status
   exposes the trainer-builder workflow
-  receives native scan results when running inside the macOS app
+  receives native scan results when running inside a native app
+
+Windows/Linux Electron App
+  wraps the desktop UI in Chromium
+  bundles registry metadata and a dependency-free Node scanner
+  exposes a narrow IPC bridge for installed-game scanning
 
 macOS App
-  wraps the desktop UI in WebKit
+  wraps the desktop UI in WebKit as a lightweight local build
   bundles scanner tools and registry metadata
-  exposes a narrow native bridge for installed-game scanning
 
 Registry
   normalized JSON records for sources and games
@@ -39,7 +43,7 @@ Safety Policy
 
 ## Trainer Builder
 
-The first milestone includes a mock scanner so the user flow can be designed without attaching to a process.
+The first milestone includes a mock scanner so the user flow can be designed without attaching to a process. It supports known registry games and custom singleplayer game drafts. Strictly multiplayer targets are blocked.
 
 A future native helper should be separate from the UI and must implement these gates:
 

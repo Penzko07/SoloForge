@@ -24,6 +24,27 @@
       "offlineOnly": true,
       "safetyStatus": "requiresManualReview",
       "notes": "Metadata-only record from a public title list."
+    },
+    {
+      "name": "Drachmae value finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for narrowing currency values in solo play."
+    },
+    {
+      "name": "Material quantity finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for wood, leather, iron, glass, and tablet quantities."
+    },
+    {
+      "name": "Save backup before tuning",
+      "type": "save-tool",
+      "offlineOnly": true,
+      "safetyStatus": "safe",
+      "notes": "Create a local save backup before manual table or value-editing work."
     }
   ],
   "safety": {

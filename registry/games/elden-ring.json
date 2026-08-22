@@ -24,6 +24,27 @@
       "offlineOnly": true,
       "safetyStatus": "requiresManualReview",
       "notes": "Metadata-only link to a public table repository. Offline profile required before any execution support."
+    },
+    {
+      "name": "Rune value finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for narrowing the current rune count in an offline singleplayer save."
+    },
+    {
+      "name": "Item quantity finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for consumable or material quantities in offline play."
+    },
+    {
+      "name": "Save backup before tuning",
+      "type": "save-tool",
+      "offlineOnly": true,
+      "safetyStatus": "safe",
+      "notes": "Create a local save backup before any manual table or value-editing work."
     }
   ],
   "safety": {

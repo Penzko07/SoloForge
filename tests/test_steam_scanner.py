@@ -71,7 +71,8 @@ class SteamScannerTests(unittest.TestCase):
         self.assertEqual(len(result["libraries"]), 2)
         self.assertEqual(len(result["games"]), 1)
         self.assertEqual(result["games"][0]["match"], "elden-ring")
-        self.assertEqual(result["games"][0]["availableFeatures"], ["Cheat table reference"])
+        self.assertIn("Cheat table reference", result["games"][0]["availableFeatures"])
+        self.assertIn("Rune value finder", result["games"][0]["availableFeatures"])
 
 
 if __name__ == "__main__":

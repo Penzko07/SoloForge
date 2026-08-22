@@ -1,6 +1,27 @@
 # Running Locally
 
-SoloForge is currently a static web MVP, not a signed native installer.
+SoloForge has a static browser UI, a Windows/Linux Electron app, and a native macOS wrapper.
+
+## Electron App
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the app:
+
+```bash
+npm start
+```
+
+Build Windows and Linux packages on the matching platform:
+
+```bash
+npm run dist:win
+npm run dist:linux
+```
 
 ## Open Directly
 
