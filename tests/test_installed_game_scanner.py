@@ -131,6 +131,24 @@ class InstalledGameScannerTests(unittest.TestCase):
         self.assertEqual(result["games"][0]["launcher"], "ea")
         self.assertEqual(result["games"][0]["match"], "example-game")
 
+    def test_drive_roots_find_common_launcher_folders(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            drive = Path(temp) / "DriveD"
+            (drive / "SteamLibrary" / "steamapps").mkdir(parents=True)
+            (drive / "GOG Games").mkdir(parents=True)
+            (drive / "Ubisoft Games").mkdir(parents=True)
+            (drive / "EA Games").mkdir(parents=True)
+
+            steam_roots = scanner.launcher_roots_from_drives("steam", [drive])
+            gog_roots = scanner.launcher_roots_from_drives("gog", [drive])
+            ubisoft_roots = scanner.launcher_roots_from_drives("ubisoft", [drive])
+            ea_roots = scanner.launcher_roots_from_drives("ea", [drive])
+
+        self.assertIn(drive / "SteamLibrary", steam_roots)
+        self.assertIn(drive / "GOG Games", gog_roots)
+        self.assertIn(drive / "Ubisoft Games", ubisoft_roots)
+        self.assertIn(drive / "EA Games", ea_roots)
+
 
 if __name__ == "__main__":
     unittest.main()
