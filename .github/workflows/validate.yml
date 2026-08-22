@@ -23,3 +23,32 @@ jobs:
 
       - name: Run tests
         run: python3 -m unittest discover -s tests
+
+      - name: Check Python syntax
+        run: python3 -m py_compile tools/*.py
+
+      - name: Check desktop JavaScript syntax
+        run: node --check apps/desktop/app.js
+
+      - name: Verify generated desktop data
+        run: |
+          python3 tools/update_app_data.py
+          git diff --exit-code apps/desktop/app-data.js
+
+  macos-app:
+    runs-on: macos-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Build macOS app
+        run: bash tools/build_macos_app.sh
+
+      - name: Archive macOS app
+        run: ditto -c -k --sequesterRsrc --keepParent build/macos/SoloForge.app build/macos/SoloForge-macos.zip
+
+      - name: Upload macOS app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SoloForge-macos
+          path: build/macos/SoloForge-macos.zip

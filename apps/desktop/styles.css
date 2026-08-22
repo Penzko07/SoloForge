@@ -252,6 +252,13 @@ button {
   margin-bottom: 16px;
 }
 
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .section-head h3,
 .section-head h4 {
   margin: 0;
@@ -517,6 +524,20 @@ td a {
   color: #06100b;
   font-weight: 800;
   overflow: hidden;
+}
+
+.secondary {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-weight: 800;
+}
+
+.secondary:hover {
+  background: #2a333a;
 }
 
 .file-button input {

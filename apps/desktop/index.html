@@ -58,6 +58,7 @@
               <div class="policy-list">
                 <div><span class="check">OK</span> Offline singleplayer context</div>
                 <div><span class="check">OK</span> Source attribution required</div>
+                <div><span class="check">OK</span> Achievement-neutral by default</div>
                 <div><span class="warn">Hold</span> Unknown licenses stay metadata-only</div>
                 <div><span class="block">No</span> Multiplayer and bypass paths blocked</div>
               </div>
@@ -70,11 +71,15 @@
             <div>
               <h3 id="installed-heading">Installed Games</h3>
             </div>
-            <label class="file-button">
-              Import scan
-              <input id="installed-import" type="file" accept="application/json,.json">
-            </label>
+            <div class="button-row">
+              <button id="native-scan" class="secondary">Scan this Mac</button>
+              <label class="file-button">
+                Import scan
+                <input id="installed-import" type="file" accept="application/json,.json">
+              </label>
+            </div>
           </div>
+          <p id="installed-status" class="section-note">Import a scan or use the native app scanner.</p>
           <div class="metric-grid" id="installed-metrics"></div>
           <div id="installed-list" class="installed-list"></div>
         </section>

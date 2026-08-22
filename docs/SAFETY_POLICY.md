@@ -10,6 +10,7 @@ SoloForge is for offline singleplayer game customization only.
 - Memory scanning for games owned by the user, when played offline.
 - Trainer definitions for offline singleplayer modes.
 - Accessibility-style assists such as speed, difficulty, resource, and grind reduction tools.
+- Achievement-neutral local tools where the game naturally keeps achievements enabled.
 
 ## Not Allowed
 
@@ -21,6 +22,7 @@ SoloForge is for offline singleplayer game customization only.
 - Stealth injection.
 - DRM bypasses.
 - Scraping proprietary trainer implementation databases.
+- Achievement spoofing or bypassing game logic that intentionally disables achievements.
 
 ## App Behavior Requirements
 
@@ -32,6 +34,7 @@ SoloForge should:
 - show source attribution before enabling imported trainer content
 - default to backups before writing configs or saves
 - make local user-created trainers private unless the user explicitly exports them
+- avoid calling platform achievement APIs or changing achievement-disabled flags
 
 ## Process Attachment Rules
 

@@ -12,14 +12,23 @@ SoloForge is built with AI assistance from OpenAI Codex. The project attributes 
 - safety policy and source policy
 - Python registry validator
 - local launcher scanner for Steam plus experimental GOG, Ubisoft Connect, and EA App metadata
+- native macOS app wrapper with a local scanner bridge
+- Steam library coverage importer for public/exported library data
 - local HTTP server for Chrome/browser testing
 - GitHub API publish helper for machines where normal `git push` has no HTTPS credentials
 - GitHub metadata importer scaffold
 - GitHub Actions workflow for registry checks
 - mock trainer-builder flow that models value scanning without attaching to real processes
 
-SoloForge is not a signed native installer yet. For now it is a local web app
-plus command-line tools. A packaged desktop build is a later milestone.
+SoloForge is not a notarized public installer yet. It can now be built as a
+local macOS `.app`, and the original browser UI still works.
+
+Build the macOS app:
+
+```bash
+bash tools/build_macos_app.sh
+open build/macos/SoloForge.app
+```
 
 Open the MVP directly:
 
@@ -109,6 +118,32 @@ support is best-effort metadata parsing and should be expanded as contributors
 verify more real launcher formats. The all-drives mode checks common launcher
 folders on mounted drives; it does not blindly crawl every file on the system.
 
+## Match a Steam Library
+
+For a public Steam profile:
+
+```bash
+python3 tools/import_steam_library.py --steam-id 76561198108903649 --pretty --output steam-library-coverage.json
+```
+
+If SteamDB is open in a browser, save the calculator HTML and import it:
+
+```bash
+python3 tools/import_steam_library.py --steamdb-html steamdb-calculator.html --pretty --output steam-library-coverage.json
+```
+
+The importer matches library games to existing SoloForge registry metadata. It
+does not download or bundle third-party cheat tables.
+
+## Achievements
+
+SoloForge is achievement-neutral. It does not spoof achievements, call Steam
+achievement APIs, or bypass game logic that disables achievements. If a game
+naturally allows achievements while local singleplayer tools are active,
+SoloForge does not block that.
+
+See `docs/ACHIEVEMENTS.md`.
+
 ## Publish to GitHub
 
 Normal `git push` is still recommended. If HTTPS credentials are missing, use a
@@ -127,6 +162,7 @@ store the token.
 ```bash
 python3 tools/validate_registry.py
 python3 -m unittest discover -s tests
+bash tools/build_macos_app.sh
 ```
 
 ## Import Philosophy

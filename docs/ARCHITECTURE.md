@@ -9,6 +9,12 @@ Desktop UI
   reads generated registry snapshot
   shows source attribution and safety status
   exposes the trainer-builder workflow
+  receives native scan results when running inside the macOS app
+
+macOS App
+  wraps the desktop UI in WebKit
+  bundles scanner tools and registry metadata
+  exposes a narrow native bridge for installed-game scanning
 
 Registry
   normalized JSON records for sources and games
@@ -18,6 +24,7 @@ Importers
   collect public metadata
   classify license and safety status
   never bypass access controls
+  can match public/exported Steam libraries against registry metadata
 
 Local Launcher Detection
   reads Steam, GOG, Ubisoft Connect, and EA App metadata when available
@@ -27,6 +34,7 @@ Local Launcher Detection
 Safety Policy
   blocks multiplayer and online contexts
   requires manual review for uncertain sources
+  stays achievement-neutral and never spoofs platform achievements
 ```
 
 ## Trainer Builder

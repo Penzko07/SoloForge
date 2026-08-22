@@ -7,6 +7,7 @@ const state = {
   candidates: [],
   narrowed: false,
   installedScan: null,
+  nativeScanActive: false,
 };
 
 const viewTitles = {
@@ -181,26 +182,37 @@ function renderInstalled() {
     $("#installed-list").innerHTML = `
       <div class="panel">
         <h4>No scan imported</h4>
-        <p>Launcher scan report pending.</p>
+        <p>Import a launcher scan JSON file, or run the native scanner from the macOS app.</p>
       </div>
     `;
     return;
   }
 
-  $("#installed-list").innerHTML = games
-    .filter(matchesQuery)
+  const visibleGames = games.filter(matchesQuery);
+  if (!visibleGames.length) {
+    $("#installed-list").innerHTML = `
+      <div class="panel">
+        <h4>No launcher games found</h4>
+        <p>The scan completed, but no matching local Steam, GOG, Ubisoft Connect, or EA App metadata was found.</p>
+      </div>
+    `;
+    return;
+  }
+
+  $("#installed-list").innerHTML = visibleGames
     .map((game) => {
       const featureText = game.availableFeatures?.length ? game.availableFeatures.join(", ") : "Review needed";
       const launcher = game.launcher || "steam";
       const idLabel = launcher === "steam" ? "Steam AppID" : `${launcher} ID`;
       const storeId = game.storeId || game.appid || "unknown";
+      const reviewStatus = game.safetyStatus || "requiresManualReview";
       return `
         <article class="installed-item">
           <div>
             <strong>${escapeHtml(game.name)}</strong>
             <span>${escapeHtml(idLabel)} ${escapeHtml(storeId)}</span>
           </div>
-          <div>${game.match ? statusPill(game.safetyStatus) : statusPill("requiresManualReview")}</div>
+          <div>${game.match ? statusPill(reviewStatus) : statusPill("requiresManualReview")}</div>
           <div><span>${escapeHtml(featureText)}</span></div>
         </article>
       `;
@@ -212,10 +224,12 @@ async function importInstalledScan(file) {
   try {
     const text = await file.text();
     const scan = JSON.parse(text);
-    if (!Array.isArray(scan.games) || !Array.isArray(scan.libraries)) {
-      throw new Error("Invalid SoloForge launcher scan JSON");
+    if (!Array.isArray(scan.games)) {
+      throw new Error("Invalid SoloForge launcher or Steam library JSON");
     }
+    if (!Array.isArray(scan.libraries)) scan.libraries = [];
     state.installedScan = scan;
+    $("#installed-status").textContent = `Imported scan: ${scan.games.length} game(s), ${scan.libraries.length} library location(s).`;
     renderInstalled();
   } catch (error) {
     $("#installed-list").innerHTML = `
@@ -225,6 +239,36 @@ async function importInstalledScan(file) {
       </div>
     `;
   }
+}
+
+function nativeBridge() {
+  return window.webkit?.messageHandlers?.soloforge;
+}
+
+function requestNativeScan() {
+  const bridge = nativeBridge();
+  if (!bridge) {
+    $("#installed-status").textContent = "Native scanner is available in the macOS app build.";
+    return;
+  }
+  state.nativeScanActive = true;
+  $("#installed-status").textContent = "Scanning local launcher metadata...";
+  bridge.postMessage({ type: "scanInstalledGames" });
+}
+
+function handleNativeScan(event) {
+  state.nativeScanActive = false;
+  if (!event.detail?.ok) {
+    $("#installed-status").textContent = event.detail?.error || "Native scan failed.";
+    return;
+  }
+  if (!Array.isArray(event.detail.payload?.games) || !Array.isArray(event.detail.payload?.libraries)) {
+    $("#installed-status").textContent = "Native scan returned invalid launcher data.";
+    return;
+  }
+  state.installedScan = event.detail.payload;
+  $("#installed-status").textContent = `Scan complete: ${state.installedScan.games.length} game(s), ${state.installedScan.libraries.length} library location(s).`;
+  renderInstalled();
 }
 
 function renderBuilderSelect() {
@@ -350,6 +394,9 @@ function bindEvents() {
     const [file] = event.target.files;
     if (file) importInstalledScan(file);
   });
+
+  $("#native-scan").addEventListener("click", requestNativeScan);
+  window.addEventListener("soloforge-native-scan", handleNativeScan);
 
   $("#first-scan").addEventListener("click", firstScan);
   $("#narrow-scan").addEventListener("click", narrowScan);
