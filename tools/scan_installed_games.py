@@ -114,6 +114,84 @@ def as_list(values: Iterable[str] | None) -> list[Path]:
     return [Path(value).expanduser() for value in values or []]
 
 
+def existing_child_dirs(path: Path) -> list[Path]:
+    try:
+        return [child for child in path.iterdir() if child.is_dir()]
+    except OSError:
+        return []
+
+
+def mounted_drive_roots() -> list[Path]:
+    system = platform.system()
+    roots: list[Path] = []
+
+    if system == "Windows":
+        for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            root = Path(f"{letter}:\\")
+            if root.exists():
+                roots.append(root)
+    elif system == "Darwin":
+        roots.extend(existing_child_dirs(Path("/Volumes")))
+    else:
+        for base in (Path("/mnt"), Path("/media")):
+            roots.extend(existing_child_dirs(base))
+
+    return unique_paths(roots)
+
+
+def launcher_roots_from_drives(launcher: str, drive_roots: list[Path]) -> list[Path]:
+    candidates: list[Path] = []
+    for drive in drive_roots:
+        if launcher == "steam":
+            candidates.extend(
+                [
+                    drive / "Steam",
+                    drive / "SteamLibrary",
+                    drive / "Games" / "Steam",
+                    drive / "Games" / "SteamLibrary",
+                    drive / "Program Files" / "Steam",
+                    drive / "Program Files (x86)" / "Steam",
+                ]
+            )
+        elif launcher == "gog":
+            candidates.extend(
+                [
+                    drive / "GOG Games",
+                    drive / "Games" / "GOG Games",
+                    drive / "GOG Galaxy" / "Games",
+                    drive / "Program Files" / "GOG Galaxy" / "Games",
+                    drive / "Program Files (x86)" / "GOG Galaxy" / "Games",
+                ]
+            )
+        elif launcher == "ubisoft":
+            candidates.extend(
+                [
+                    drive / "Ubisoft Games",
+                    drive / "Games" / "Ubisoft Games",
+                    drive / "Program Files" / "Ubisoft" / "Ubisoft Game Launcher",
+                    drive / "Program Files (x86)" / "Ubisoft" / "Ubisoft Game Launcher",
+                ]
+            )
+        elif launcher == "ea":
+            candidates.extend(
+                [
+                    drive / "EA Games",
+                    drive / "Games" / "EA Games",
+                    drive / "Program Files" / "EA Games",
+                    drive / "Program Files" / "Electronic Arts",
+                    drive / "Program Files (x86)" / "Electronic Arts",
+                ]
+            )
+
+    return unique_paths([path for path in candidates if path.exists()])
+
+
+def configured_roots(launcher: str, provided_roots: list[str], drive_roots: list[Path]) -> list[Path]:
+    roots = as_list(provided_roots) or default_roots(launcher)
+    roots.extend(launcher_roots_from_drives(launcher, drive_roots))
+    return unique_paths(roots)
+
+
 def first_string(record: dict[str, Any], keys: Iterable[str]) -> str | None:
     for key in keys:
         value = record.get(key)
@@ -476,6 +554,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--ubisoft-root", action="append", default=[], help="Ubisoft Connect metadata or library root.")
     parser.add_argument("--ea-root", action="append", default=[], help="EA App metadata or library root.")
     parser.add_argument("--scan-root", action="append", default=[], help="Extra folder to search for Steam libraries.")
+    parser.add_argument("--drive-root", action="append", default=[], help="Mounted drive root to inspect for common launcher folders.")
+    parser.add_argument("--all-drives", action="store_true", help="Inspect common launcher folders on mounted drives.")
     parser.add_argument("--output", help="Optional JSON output path.")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output.")
     return parser.parse_args()
@@ -484,11 +564,15 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     launchers = args.launcher or sorted(LAUNCHER_PLATFORMS)
+    drive_roots = as_list(args.drive_root)
+    if args.all_drives:
+        drive_roots.extend(mounted_drive_roots())
+    drive_roots = unique_paths(drive_roots)
     roots = {
-        "steam": as_list(args.steam_root) or default_roots("steam"),
-        "gog": as_list(args.gog_root) or default_roots("gog"),
-        "ubisoft": as_list(args.ubisoft_root) or default_roots("ubisoft"),
-        "ea": as_list(args.ea_root) or default_roots("ea"),
+        "steam": configured_roots("steam", args.steam_root, drive_roots),
+        "gog": configured_roots("gog", args.gog_root, drive_roots),
+        "ubisoft": configured_roots("ubisoft", args.ubisoft_root, drive_roots),
+        "ea": configured_roots("ea", args.ea_root, drive_roots),
     }
     result = scan_installed_games(launchers, roots, as_list(args.scan_root))
     serialized = json.dumps(result, indent=2 if args.pretty else None, ensure_ascii=False)
