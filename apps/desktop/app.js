@@ -181,7 +181,7 @@ function renderInstalled() {
     $("#installed-list").innerHTML = `
       <div class="panel">
         <h4>No scan imported</h4>
-        <p>Steam library report pending.</p>
+        <p>Launcher scan report pending.</p>
       </div>
     `;
     return;
@@ -213,7 +213,7 @@ async function importInstalledScan(file) {
     const text = await file.text();
     const scan = JSON.parse(text);
     if (!Array.isArray(scan.games) || !Array.isArray(scan.libraries)) {
-      throw new Error("Invalid SoloForge Steam scan JSON");
+      throw new Error("Invalid SoloForge launcher scan JSON");
     }
     state.installedScan = scan;
     renderInstalled();
