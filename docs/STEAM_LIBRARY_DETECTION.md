@@ -54,6 +54,15 @@ python3 tools/scan_installed_games.py --ubisoft-root "D:\Ubisoft Games" --pretty
 python3 tools/scan_installed_games.py --ea-root "D:\EA Games" --pretty
 ```
 
+Mounted drives:
+
+```bash
+python3 tools/scan_installed_games.py --all-drives --pretty
+python3 tools/scan_installed_games.py --drive-root "D:\" --pretty
+```
+
+Drive scanning checks common launcher folders such as `SteamLibrary`, `GOG Games`, `Ubisoft Games`, and `EA Games`. It avoids a full recursive disk crawl by default.
+
 Write an import file for the desktop MVP:
 
 ```bash
