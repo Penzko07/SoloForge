@@ -77,6 +77,12 @@ SoloForge can scan local launcher metadata without SteamDB, launcher logins, or 
 python3 tools/scan_installed_games.py --pretty --output installed-games.json
 ```
 
+Search common launcher folders on mounted drives:
+
+```bash
+python3 tools/scan_installed_games.py --all-drives --pretty --output installed-games.json
+```
+
 Scan one launcher:
 
 ```bash
@@ -93,13 +99,15 @@ python3 tools/scan_steam_libraries.py --steam-root "C:\Program Files (x86)\Steam
 python3 tools/scan_installed_games.py --gog-root "D:\GOG Games" --pretty
 python3 tools/scan_installed_games.py --ubisoft-root "D:\Ubisoft Games" --pretty
 python3 tools/scan_installed_games.py --ea-root "D:\EA Games" --pretty
+python3 tools/scan_installed_games.py --drive-root "D:\" --pretty
 ```
 
 Then open `apps/desktop/index.html`, go to `Installed`, and import the generated JSON file.
 
 Steam detection is the most complete scanner. GOG, Ubisoft Connect, and EA App
 support is best-effort metadata parsing and should be expanded as contributors
-verify more real launcher formats.
+verify more real launcher formats. The all-drives mode checks common launcher
+folders on mounted drives; it does not blindly crawl every file on the system.
 
 ## Publish to GitHub
 
