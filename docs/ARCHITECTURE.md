@@ -19,9 +19,9 @@ Importers
   classify license and safety status
   never bypass access controls
 
-Local Library Detection
-  reads Steam libraryfolders.vdf and appmanifest_*.acf
-  matches installed AppIDs against registry metadata
+Local Launcher Detection
+  reads Steam, GOG, Ubisoft Connect, and EA App metadata when available
+  matches installed store IDs and titles against registry metadata
   never attaches to processes or uploads private library data
 
 Safety Policy

@@ -191,11 +191,14 @@ function renderInstalled() {
     .filter(matchesQuery)
     .map((game) => {
       const featureText = game.availableFeatures?.length ? game.availableFeatures.join(", ") : "Review needed";
+      const launcher = game.launcher || "steam";
+      const idLabel = launcher === "steam" ? "Steam AppID" : `${launcher} ID`;
+      const storeId = game.storeId || game.appid || "unknown";
       return `
         <article class="installed-item">
           <div>
             <strong>${escapeHtml(game.name)}</strong>
-            <span>Steam AppID ${escapeHtml(game.appid)}</span>
+            <span>${escapeHtml(idLabel)} ${escapeHtml(storeId)}</span>
           </div>
           <div>${game.match ? statusPill(game.safetyStatus) : statusPill("requiresManualReview")}</div>
           <div><span>${escapeHtml(featureText)}</span></div>

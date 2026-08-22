@@ -6,20 +6,31 @@ SoloForge is built with AI assistance from OpenAI Codex. The project attributes 
 
 ## What Works Now
 
-- static desktop-style MVP in `apps/desktop`
+- static desktop-style web MVP in `apps/desktop`
 - normalized registry records in `registry`
 - source attribution and license status tracking
 - safety policy and source policy
 - Python registry validator
-- local Steam library scanner for installed games across Steam library folders
+- local launcher scanner for Steam plus experimental GOG, Ubisoft Connect, and EA App metadata
+- local HTTP server for Chrome/browser testing
+- GitHub API publish helper for machines where normal `git push` has no HTTPS credentials
 - GitHub metadata importer scaffold
 - GitHub Actions workflow for registry checks
 - mock trainer-builder flow that models value scanning without attaching to real processes
+
+SoloForge is not a signed native installer yet. For now it is a local web app
+plus command-line tools. A packaged desktop build is a later milestone.
 
 Open the MVP directly:
 
 ```text
 apps/desktop/index.html
+```
+
+Or serve it locally for Chrome:
+
+```bash
+python3 tools/serve_desktop_app.py --open
 ```
 
 No build step is required for the first milestone.
@@ -58,22 +69,50 @@ tests/                   Python tests
 tools/                   validator, importer, app data generator
 ```
 
-## Detect Installed Steam Games
+## Detect Installed Games
 
-SoloForge can scan local Steam manifest files without SteamDB, Steam login, or a Steam Web API key:
+SoloForge can scan local launcher metadata without SteamDB, launcher logins, or Web API keys:
 
 ```bash
-python3 tools/scan_steam_libraries.py --pretty --output installed-games.json
+python3 tools/scan_installed_games.py --pretty --output installed-games.json
 ```
 
-If Steam is installed in a custom location or on another drive:
+Scan one launcher:
+
+```bash
+python3 tools/scan_installed_games.py --launcher steam --pretty
+python3 tools/scan_installed_games.py --launcher gog --pretty
+python3 tools/scan_installed_games.py --launcher ubisoft --pretty
+python3 tools/scan_installed_games.py --launcher ea --pretty
+```
+
+If a launcher is installed in a custom location or on another drive:
 
 ```bash
 python3 tools/scan_steam_libraries.py --steam-root "C:\Program Files (x86)\Steam" --pretty
-python3 tools/scan_steam_libraries.py --scan-root "D:\SteamLibrary" --pretty
+python3 tools/scan_installed_games.py --gog-root "D:\GOG Games" --pretty
+python3 tools/scan_installed_games.py --ubisoft-root "D:\Ubisoft Games" --pretty
+python3 tools/scan_installed_games.py --ea-root "D:\EA Games" --pretty
 ```
 
 Then open `apps/desktop/index.html`, go to `Installed`, and import the generated JSON file.
+
+Steam detection is the most complete scanner. GOG, Ubisoft Connect, and EA App
+support is best-effort metadata parsing and should be expanded as contributors
+verify more real launcher formats.
+
+## Publish to GitHub
+
+Normal `git push` is still recommended. If HTTPS credentials are missing, use a
+temporary token:
+
+```bash
+export SOLOFORGE_GITHUB_TOKEN="github_pat_..."
+python3 tools/publish_to_github.py --repo Penzko07/SoloForge --branch main
+```
+
+The helper publishes the committed `HEAD` through GitHub's Git API and does not
+store the token.
 
 ## Validate
 
