@@ -12,7 +12,10 @@
   },
   "game": {
     "title": "Dark Souls III",
-    "platforms": ["steam"]
+    "platforms": ["steam"],
+    "storeIds": {
+      "steam": "374320"
+    }
   },
   "features": [
     {

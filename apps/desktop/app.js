@@ -6,10 +6,12 @@ const state = {
   filter: "all",
   candidates: [],
   narrowed: false,
+  installedScan: null,
 };
 
 const viewTitles = {
   dashboard: "Overview",
+  installed: "Installed",
   registry: "Registry",
   sources: "Sources",
   builder: "Builder",
@@ -19,13 +21,35 @@ const viewTitles = {
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (character) => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    };
+    return entities[character];
+  });
+}
+
+function safeUrl(value) {
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "#";
+  } catch {
+    return "#";
+  }
+}
+
 function matchesQuery(record) {
   if (!state.query) return true;
   return JSON.stringify(record).toLowerCase().includes(state.query.toLowerCase());
 }
 
 function statusPill(status) {
-  if (status === "approved" || status === "safe") return `<span class="pill pill-ok">${status}</span>`;
+  if (status === "approved" || status === "safe") return `<span class="pill pill-ok">${escapeHtml(status)}</span>`;
   if (status === "blocked") return `<span class="pill block">blocked</span>`;
   return `<span class="pill pill-warn">review</span>`;
 }
@@ -75,7 +99,7 @@ function renderReviewList() {
     .map(
       (item) => `
         <div class="review-item">
-          <div><strong>${item.name}</strong><br>${item.source.importMode} · ${item.source.license}</div>
+          <div><strong>${escapeHtml(item.name)}</strong><br>${escapeHtml(item.source.importMode)} · ${escapeHtml(item.source.license)}</div>
           ${statusPill(item.safety.reviewStatus)}
         </div>
       `,
@@ -91,9 +115,9 @@ function renderGames() {
         <article class="game-card">
           <header>
             <div>
-              <h4>${game.name}</h4>
+              <h4>${escapeHtml(game.name)}</h4>
               <div class="meta-row">
-                ${(game.game?.platforms || []).map((platform) => `<span class="pill">${platform}</span>`).join("")}
+                ${(game.game?.platforms || []).map((platform) => `<span class="pill">${escapeHtml(platform)}</span>`).join("")}
               </div>
             </div>
             ${statusPill(game.safety.reviewStatus)}
@@ -103,7 +127,7 @@ function renderGames() {
               .map(
                 (feature) => `
                   <li>
-                    <span>${feature.name}</span>
+                    <span>${escapeHtml(feature.name)}</span>
                     ${statusPill(feature.safetyStatus)}
                   </li>
                 `,
@@ -111,8 +135,8 @@ function renderGames() {
               .join("")}
           </ul>
           <div class="meta-row">
-            <span class="pill">${game.source.importMode}</span>
-            <span class="pill">${game.source.license}</span>
+            <span class="pill">${escapeHtml(game.source.importMode)}</span>
+            <span class="pill">${escapeHtml(game.source.license)}</span>
           </div>
         </article>
       `,
@@ -126,20 +150,83 @@ function renderSources() {
     .map(
       (record) => `
         <tr>
-          <td>${record.name}</td>
-          <td>${record.source.importMode}</td>
-          <td>${record.source.license}</td>
+          <td>${escapeHtml(record.name)}</td>
+          <td>${escapeHtml(record.source.importMode)}</td>
+          <td>${escapeHtml(record.source.license)}</td>
           <td>${statusPill(record.safety.reviewStatus)}</td>
-          <td><a href="${record.source.url}" target="_blank" rel="noreferrer">${sourceHost(record.source.url)}</a></td>
+          <td><a href="${escapeHtml(safeUrl(record.source.url))}" target="_blank" rel="noreferrer">${escapeHtml(sourceHost(record.source.url))}</a></td>
         </tr>
       `,
     )
     .join("");
 }
 
+function renderInstalled() {
+  const scan = state.installedScan;
+  const games = scan?.games || [];
+  const matched = games.filter((game) => game.match).length;
+  const playable = games.filter((game) => game.availableFeatures?.length).length;
+  const libraries = scan?.libraries?.length || 0;
+
+  $("#installed-metrics").innerHTML = [
+    ["Installed", games.length],
+    ["Matched", matched],
+    ["With tools", playable],
+    ["Libraries", libraries],
+  ]
+    .map(([label, value]) => `<div class="metric"><span>${label}</span><strong>${value}</strong></div>`)
+    .join("");
+
+  if (!scan) {
+    $("#installed-list").innerHTML = `
+      <div class="panel">
+        <h4>No scan imported</h4>
+        <p>Steam library report pending.</p>
+      </div>
+    `;
+    return;
+  }
+
+  $("#installed-list").innerHTML = games
+    .filter(matchesQuery)
+    .map((game) => {
+      const featureText = game.availableFeatures?.length ? game.availableFeatures.join(", ") : "Review needed";
+      return `
+        <article class="installed-item">
+          <div>
+            <strong>${escapeHtml(game.name)}</strong>
+            <span>Steam AppID ${escapeHtml(game.appid)}</span>
+          </div>
+          <div>${game.match ? statusPill(game.safetyStatus) : statusPill("requiresManualReview")}</div>
+          <div><span>${escapeHtml(featureText)}</span></div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+async function importInstalledScan(file) {
+  try {
+    const text = await file.text();
+    const scan = JSON.parse(text);
+    if (!Array.isArray(scan.games) || !Array.isArray(scan.libraries)) {
+      throw new Error("Invalid SoloForge Steam scan JSON");
+    }
+    state.installedScan = scan;
+    renderInstalled();
+  } catch (error) {
+    $("#installed-list").innerHTML = `
+      <div class="panel">
+        <h4>Import failed</h4>
+        <p>${escapeHtml(error.message)}</p>
+      </div>
+    `;
+  }
+}
+
 function renderBuilderSelect() {
   $("#builder-game").innerHTML = registry.games
-    .map((game) => `<option value="${game.id}">${game.name}</option>`)
+    .map((game) => `<option value="${escapeHtml(game.id)}">${escapeHtml(game.name)}</option>`)
     .join("");
 }
 
@@ -211,8 +298,8 @@ function renderCandidates() {
     .map(
       (candidate) => `
         <div class="candidate">
-          <div><strong>${candidate.address}</strong><br>${candidate.type}</div>
-          <span>${candidate.value}</span>
+          <div><strong>${escapeHtml(candidate.address)}</strong><br>${escapeHtml(candidate.type)}</div>
+          <span>${escapeHtml(candidate.value)}</span>
         </div>
       `,
     )
@@ -231,6 +318,7 @@ function renderAll() {
   renderReviewList();
   renderGames();
   renderSources();
+  renderInstalled();
   renderBuilderSelect();
   renderCandidates();
 }
@@ -252,6 +340,12 @@ function bindEvents() {
     state.query = event.target.value;
     renderGames();
     renderSources();
+    renderInstalled();
+  });
+
+  $("#installed-import").addEventListener("change", (event) => {
+    const [file] = event.target.files;
+    if (file) importInstalledScan(file);
   });
 
   $("#first-scan").addEventListener("click", firstScan);

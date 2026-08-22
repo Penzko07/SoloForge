@@ -12,7 +12,10 @@
   },
   "game": {
     "title": "Cave Story+",
-    "platforms": ["steam"]
+    "platforms": ["steam"],
+    "storeIds": {
+      "steam": "200900"
+    }
   },
   "features": [
     {

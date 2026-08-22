@@ -12,7 +12,10 @@
   },
   "game": {
     "title": "Quest of Dungeons",
-    "platforms": ["steam"]
+    "platforms": ["steam"],
+    "storeIds": {
+      "steam": "270050"
+    }
   },
   "features": [
     {

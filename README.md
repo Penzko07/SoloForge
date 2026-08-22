@@ -11,6 +11,7 @@ SoloForge is built with AI assistance from OpenAI Codex. The project attributes 
 - source attribution and license status tracking
 - safety policy and source policy
 - Python registry validator
+- local Steam library scanner for installed games across Steam library folders
 - GitHub metadata importer scaffold
 - GitHub Actions workflow for registry checks
 - mock trainer-builder flow that models value scanning without attaching to real processes
@@ -56,6 +57,23 @@ registry/sources/        source records
 tests/                   Python tests
 tools/                   validator, importer, app data generator
 ```
+
+## Detect Installed Steam Games
+
+SoloForge can scan local Steam manifest files without SteamDB, Steam login, or a Steam Web API key:
+
+```bash
+python3 tools/scan_steam_libraries.py --pretty --output installed-games.json
+```
+
+If Steam is installed in a custom location or on another drive:
+
+```bash
+python3 tools/scan_steam_libraries.py --steam-root "C:\Program Files (x86)\Steam" --pretty
+python3 tools/scan_steam_libraries.py --scan-root "D:\" --pretty
+```
+
+Then open `apps/desktop/index.html`, go to `Installed`, and import the generated JSON file.
 
 ## Validate
 

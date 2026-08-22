@@ -12,7 +12,10 @@
   },
   "game": {
     "title": "Assassin's Creed Odyssey",
-    "platforms": ["steam", "ubisoft-connect"]
+    "platforms": ["steam", "ubisoft-connect"],
+    "storeIds": {
+      "steam": "812140"
+    }
   },
   "features": [
     {

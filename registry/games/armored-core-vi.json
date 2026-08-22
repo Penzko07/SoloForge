@@ -12,7 +12,10 @@
   },
   "game": {
     "title": "Armored Core VI",
-    "platforms": ["steam"]
+    "platforms": ["steam"],
+    "storeIds": {
+      "steam": "1888160"
+    }
   },
   "features": [
     {

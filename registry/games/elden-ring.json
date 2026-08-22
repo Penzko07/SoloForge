@@ -12,7 +12,10 @@
   },
   "game": {
     "title": "Elden Ring",
-    "platforms": ["steam"]
+    "platforms": ["steam"],
+    "storeIds": {
+      "steam": "1245620"
+    }
   },
   "features": [
     {
