@@ -28,7 +28,7 @@ python3 tools/scan_steam_libraries.py --steam-root "C:\Program Files (x86)\Steam
 Search another drive or folder for Steam libraries:
 
 ```bash
-python3 tools/scan_steam_libraries.py --scan-root "D:\" --pretty
+python3 tools/scan_steam_libraries.py --scan-root "D:\SteamLibrary" --pretty
 ```
 
 Write an import file for the desktop MVP:

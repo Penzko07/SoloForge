@@ -70,7 +70,7 @@ If Steam is installed in a custom location or on another drive:
 
 ```bash
 python3 tools/scan_steam_libraries.py --steam-root "C:\Program Files (x86)\Steam" --pretty
-python3 tools/scan_steam_libraries.py --scan-root "D:\" --pretty
+python3 tools/scan_steam_libraries.py --scan-root "D:\SteamLibrary" --pretty
 ```
 
 Then open `apps/desktop/index.html`, go to `Installed`, and import the generated JSON file.
