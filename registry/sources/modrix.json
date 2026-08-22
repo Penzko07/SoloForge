@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "modrix",
+  "kind": "source",
+  "name": "Modrix",
+  "source": {
+    "name": "ParkerrDev/Modrix",
+    "url": "https://github.com/ParkerrDev/Modrix",
+    "importMode": "metadata-only",
+    "license": "repository license review required",
+    "lastChecked": "2026-08-22"
+  },
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Metadata references Modrix as an open-source mod-manager architecture source."
+  }
+}

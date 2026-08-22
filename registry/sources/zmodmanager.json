@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "zmodmanager",
+  "kind": "source",
+  "name": "ZModManager",
+  "source": {
+    "name": "TheHolyOneZ/ZModManager",
+    "url": "https://github.com/TheHolyOneZ/ZModManager",
+    "importMode": "metadata-only",
+    "license": "MIT",
+    "lastChecked": "2026-08-22"
+  },
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Metadata references ZModManager as an MIT-licensed architecture inspiration for Unity mod management."
+  }
+}

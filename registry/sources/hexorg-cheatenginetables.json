@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "hexorg-cheatenginetables",
+  "kind": "source",
+  "name": "Hexorg CheatEngineTables",
+  "source": {
+    "name": "Hexorg/CheatEngineTables",
+    "url": "https://github.com/hexorg/cheatenginetables",
+    "importMode": "metadata-only",
+    "license": "unknown",
+    "lastChecked": "2026-08-22"
+  },
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Metadata references Hexorg/CheatEngineTables on GitHub. Actual table redistribution requires license review."
+  }
+}

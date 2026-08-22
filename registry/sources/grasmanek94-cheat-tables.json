@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "grasmanek94-cheat-tables",
+  "kind": "source",
+  "name": "grasmanek94 Cheat Tables",
+  "source": {
+    "name": "grasmanek94/cheat-tables",
+    "url": "https://github.com/grasmanek94/cheat-tables",
+    "importMode": "metadata-only",
+    "license": "unknown",
+    "lastChecked": "2026-08-22"
+  },
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Metadata references grasmanek94/cheat-tables. Actual table redistribution requires license review."
+  }
+}

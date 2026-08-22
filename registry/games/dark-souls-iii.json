@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "dark-souls-iii",
+  "kind": "game",
+  "name": "Dark Souls III",
+  "source": {
+    "name": "The Grand Archives",
+    "url": "https://github.com/The-Grand-Archives/Dark-Souls-III-CT-TGA",
+    "importMode": "metadata-only",
+    "license": "per-repository review required",
+    "lastChecked": "2026-08-22"
+  },
+  "game": {
+    "title": "Dark Souls III",
+    "platforms": ["steam"]
+  },
+  "features": [
+    {
+      "name": "Cheat table reference",
+      "type": "ct-reference",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Metadata-only link. Online features must remain blocked."
+    }
+  ],
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Source metadata references The Grand Archives Dark Souls III table repository."
+  }
+}

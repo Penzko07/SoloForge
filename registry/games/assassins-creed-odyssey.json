@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "assassins-creed-odyssey",
+  "kind": "game",
+  "name": "Assassin's Creed Odyssey",
+  "source": {
+    "name": "bbfox0703/Mydev-Cheat-Engine-Tables",
+    "url": "https://github.com/bbfox0703/Mydev-Cheat-Engine-Tables",
+    "importMode": "metadata-only",
+    "license": "custom attribution requested",
+    "lastChecked": "2026-08-22"
+  },
+  "game": {
+    "title": "Assassin's Creed Odyssey",
+    "platforms": ["steam", "ubisoft-connect"]
+  },
+  "features": [
+    {
+      "name": "Cheat table metadata",
+      "type": "ct-reference",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Metadata-only record from a public title list."
+    }
+  ],
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Source metadata references bbfox0703/Mydev-Cheat-Engine-Tables."
+  }
+}

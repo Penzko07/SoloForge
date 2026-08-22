@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "armored-core-vi",
+  "kind": "game",
+  "name": "Armored Core VI",
+  "source": {
+    "name": "The Grand Archives",
+    "url": "https://github.com/The-Grand-Archives/ARMORED-CORE-VI-CT-TGA",
+    "importMode": "metadata-only",
+    "license": "per-repository review required",
+    "lastChecked": "2026-08-22"
+  },
+  "game": {
+    "title": "Armored Core VI",
+    "platforms": ["steam"]
+  },
+  "features": [
+    {
+      "name": "Cheat table reference",
+      "type": "ct-reference",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Metadata-only link. Any future trainer support must be offline singleplayer only."
+    }
+  ],
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Source metadata references The Grand Archives Armored Core VI table repository."
+  }
+}

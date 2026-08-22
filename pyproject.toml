@@ -1,0 +1,14 @@
+[project]
+name = "soloforge"
+version = "0.1.0"
+description = "Open-source offline singleplayer game tuning, mod management, and trainer creation."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-3.0-or-later" }
+authors = [
+  { name = "Penzko07" }
+]
+
+[tool.soloforge]
+registry_schema_version = "0.1.0"
+safety_policy_version = "0.1.0"

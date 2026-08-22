@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "opencheattables",
+  "kind": "source",
+  "name": "Open Cheat Tables",
+  "source": {
+    "name": "Open Cheat Tables",
+    "url": "https://opencheattables.com",
+    "importMode": "metadata-only",
+    "license": "mixed/unknown",
+    "lastChecked": "2026-08-22"
+  },
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Metadata references Open Cheat Tables. Individual posts and attachments require per-item license and safety review."
+  }
+}

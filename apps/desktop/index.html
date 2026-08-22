@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SoloForge</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar" aria-label="SoloForge navigation">
+        <div class="brand">
+          <img src="assets/soloforge-mark.svg" alt="" width="44" height="44">
+          <div>
+            <h1>SoloForge</h1>
+            <p>Offline singleplayer</p>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Views">
+          <button class="nav-button is-active" data-view="dashboard">Overview</button>
+          <button class="nav-button" data-view="registry">Registry</button>
+          <button class="nav-button" data-view="sources">Sources</button>
+          <button class="nav-button" data-view="builder">Builder</button>
+          <button class="nav-button" data-view="about">About</button>
+        </nav>
+
+        <div class="sidebar-status">
+          <span class="status-dot"></span>
+          <span>singleplayer only</span>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="toolbar">
+          <div>
+            <p class="eyebrow">Registry MVP</p>
+            <h2 id="view-title">Overview</h2>
+          </div>
+          <label class="search">
+            <span>Search</span>
+            <input id="search-input" type="search" placeholder="Game, source, feature">
+          </label>
+        </header>
+
+        <section id="dashboard-view" class="view is-visible" aria-labelledby="dashboard-heading">
+          <h3 id="dashboard-heading">Project State</h3>
+          <div class="metric-grid" id="metric-grid"></div>
+          <div class="split">
+            <section class="panel">
+              <h4>Review Queue</h4>
+              <div id="review-list" class="review-list"></div>
+            </section>
+            <section class="panel">
+              <h4>Safety Gate</h4>
+              <div class="policy-list">
+                <div><span class="check">OK</span> Offline singleplayer context</div>
+                <div><span class="check">OK</span> Source attribution required</div>
+                <div><span class="warn">Hold</span> Unknown licenses stay metadata-only</div>
+                <div><span class="block">No</span> Multiplayer and bypass paths blocked</div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section id="registry-view" class="view" aria-labelledby="registry-heading">
+          <div class="section-head">
+            <h3 id="registry-heading">Games</h3>
+            <div class="segmented" aria-label="Registry filter">
+              <button class="segment is-active" data-filter="all">All</button>
+              <button class="segment" data-filter="safe">Safe</button>
+              <button class="segment" data-filter="review">Review</button>
+            </div>
+          </div>
+          <div id="game-grid" class="game-grid"></div>
+        </section>
+
+        <section id="sources-view" class="view" aria-labelledby="sources-heading">
+          <h3 id="sources-heading">Sources</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Import</th>
+                  <th>License</th>
+                  <th>Status</th>
+                  <th>URL</th>
+                </tr>
+              </thead>
+              <tbody id="sources-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="builder-view" class="view" aria-labelledby="builder-heading">
+          <div class="section-head">
+            <h3 id="builder-heading">Trainer Builder</h3>
+            <span class="pill pill-warn">Mock helper</span>
+          </div>
+          <div class="builder">
+            <section class="builder-step">
+              <label>
+                Game
+                <select id="builder-game"></select>
+              </label>
+              <label>
+                Value type
+                <select id="value-type">
+                  <option value="int32">int32</option>
+                  <option value="float">float</option>
+                  <option value="double">double</option>
+                </select>
+              </label>
+              <label>
+                Current value
+                <input id="scan-value" type="number" value="1240">
+              </label>
+              <button id="first-scan" class="primary">First scan</button>
+            </section>
+
+            <section class="builder-step">
+              <label>
+                Changed value
+                <input id="changed-value" type="number" value="1190">
+              </label>
+              <button id="narrow-scan">Narrow</button>
+              <button id="save-draft">Save draft</button>
+              <output id="scan-status">Waiting for scan</output>
+            </section>
+
+            <section class="candidate-panel">
+              <div class="section-head">
+                <h4>Candidates</h4>
+                <span id="candidate-count" class="pill">0</span>
+              </div>
+              <div id="candidate-list" class="candidate-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="about-view" class="view" aria-labelledby="about-heading">
+          <h3 id="about-heading">About</h3>
+          <div class="about-grid">
+            <section class="panel">
+              <h4>Attribution</h4>
+              <p>Created by Penzko07 with AI assistance from OpenAI Codex.</p>
+            </section>
+            <section class="panel">
+              <h4>License</h4>
+              <p>Code: GPL-3.0-or-later. Docs and original registry metadata: CC BY 4.0 unless noted otherwise.</p>
+            </section>
+            <section class="panel">
+              <h4>Boundary</h4>
+              <p>No multiplayer cheats, anti-cheat bypasses, DRM bypasses, or proprietary database scraping.</p>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

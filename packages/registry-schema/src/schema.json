@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://soloforge.dev/schemas/registry-entry.schema.json",
+  "title": "SoloForge Registry Entry",
+  "type": "object",
+  "required": ["schemaVersion", "id", "kind", "name", "source"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "0.1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["source", "game", "feature"]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "$ref": "#/$defs/sourceRef"
+    },
+    "game": {
+      "$ref": "#/$defs/gameRef"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/feature"
+      }
+    },
+    "safety": {
+      "$ref": "#/$defs/safety"
+    },
+    "attribution": {
+      "$ref": "#/$defs/attribution"
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "required": ["name", "url", "importMode", "license"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "importMode": {
+          "type": "string",
+          "enum": ["metadata-only", "redistributable"]
+        },
+        "license": {
+          "type": "string"
+        },
+        "lastChecked": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "gameRef": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "platforms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "storeIds": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "feature": {
+      "type": "object",
+      "required": ["name", "type", "offlineOnly", "safetyStatus"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["config-patch", "save-tool", "mod-toggle", "memory-scan", "ct-reference", "guide", "map", "unknown"]
+        },
+        "offlineOnly": {
+          "type": "boolean",
+          "const": true
+        },
+        "safetyStatus": {
+          "type": "string",
+          "enum": ["safe", "requiresManualReview", "blocked"]
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "safety": {
+      "type": "object",
+      "required": ["singleplayerOnly", "offlineOnly", "multiplayerBlocked"],
+      "properties": {
+        "singleplayerOnly": {
+          "type": "boolean",
+          "const": true
+        },
+        "offlineOnly": {
+          "type": "boolean",
+          "const": true
+        },
+        "multiplayerBlocked": {
+          "type": "boolean",
+          "const": true
+        },
+        "reviewStatus": {
+          "type": "string",
+          "enum": ["approved", "requiresManualReview", "blocked"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "attribution": {
+      "type": "object",
+      "required": ["required", "text"],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

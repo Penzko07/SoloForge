@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "quest-of-dungeons",
+  "kind": "game",
+  "name": "Quest of Dungeons",
+  "source": {
+    "name": "grasmanek94/cheat-tables",
+    "url": "https://github.com/grasmanek94/cheat-tables",
+    "importMode": "metadata-only",
+    "license": "unknown",
+    "lastChecked": "2026-08-22"
+  },
+  "game": {
+    "title": "Quest of Dungeons",
+    "platforms": ["steam"]
+  },
+  "features": [
+    {
+      "name": "Cheat table metadata",
+      "type": "ct-reference",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Metadata-only record. Redistribution blocked until license review."
+    }
+  ],
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Source metadata references grasmanek94/cheat-tables."
+  }
+}

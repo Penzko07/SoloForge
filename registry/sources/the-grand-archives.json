@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "the-grand-archives",
+  "kind": "source",
+  "name": "The Grand Archives",
+  "source": {
+    "name": "The Grand Archives",
+    "url": "https://github.com/The-Grand-Archives",
+    "importMode": "metadata-only",
+    "license": "per-repository review required",
+    "lastChecked": "2026-08-22"
+  },
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Metadata references The Grand Archives repositories. Each table requires offline-use and license review before redistribution."
+  }
+}

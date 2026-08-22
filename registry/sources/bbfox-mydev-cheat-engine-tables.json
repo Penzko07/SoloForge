@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "bbfox-mydev-cheat-engine-tables",
+  "kind": "source",
+  "name": "Mydev Cheat Engine Tables",
+  "source": {
+    "name": "bbfox0703/Mydev-Cheat-Engine-Tables",
+    "url": "https://github.com/bbfox0703/Mydev-Cheat-Engine-Tables",
+    "importMode": "metadata-only",
+    "license": "custom attribution requested",
+    "lastChecked": "2026-08-22"
+  },
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": true,
+    "text": "Metadata references bbfox0703/Mydev-Cheat-Engine-Tables. Redistribution requires per-item license review."
+  }
+}

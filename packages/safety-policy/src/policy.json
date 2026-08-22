@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "0.1.0",
+  "productName": "SoloForge",
+  "defaultDecision": "requiresManualReview",
+  "allowedContexts": [
+    "offline-singleplayer",
+    "local-config-editing",
+    "savegame-backup",
+    "user-authored-local-trainer"
+  ],
+  "blockedContexts": [
+    "multiplayer",
+    "online-economy",
+    "pvp",
+    "leaderboards",
+    "matchmaking",
+    "anti-cheat-bypass",
+    "drm-bypass",
+    "proprietary-database-scrape"
+  ],
+  "requiredUserAcknowledgements": [
+    "I own this game or have permission to modify my local copy.",
+    "I am playing offline singleplayer.",
+    "I understand that changing game memory or files can crash the game or corrupt saves.",
+    "I have created a backup where relevant."
+  ]
+}
