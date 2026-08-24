@@ -1,0 +1,205 @@
+[
+  {
+    "id": "cyberpunk-2077-local",
+    "name": "Cyberpunk 2077",
+    "game": { "platform": "gog", "storeId": "1423049311" },
+    "features": ["Save backup", "Guided money value draft", "Guided inventory quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "black-myth-wukong-local",
+    "name": "Black Myth: Wukong",
+    "game": { "platform": "steam", "storeId": "2358720" },
+    "features": ["Save backup", "Guided resource value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "car-mechanic-simulator-2021-local",
+    "name": "Car Mechanic Simulator 2021",
+    "game": { "platform": "steam", "storeId": "1190000" },
+    "features": ["Save backup", "Guided credits value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "clair-obscur-expedition-33-local",
+    "name": "Clair Obscur: Expedition 33",
+    "game": { "platform": "steam", "storeId": "1903340" },
+    "features": ["Save backup", "Guided currency value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "dragons-dogma-2-local",
+    "name": "Dragon's Dogma 2",
+    "game": { "platform": "steam", "storeId": "2054970" },
+    "features": ["Save backup", "Guided gold value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "fears-to-fathom-scratch-creek-local",
+    "name": "Fears to Fathom - Scratch Creek",
+    "game": { "platform": "steam", "storeId": "4121170" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "fears-to-fathom-woodbury-getaway-local",
+    "name": "Fears to Fathom - Woodbury Getaway",
+    "game": { "platform": "steam", "storeId": "2961530" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "final-fantasy-xvi-local",
+    "name": "FINAL FANTASY XVI",
+    "game": { "platform": "steam", "storeId": "2515020" },
+    "features": ["Save backup", "Guided gil value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "ghostwire-tokyo-local",
+    "name": "Ghostwire: Tokyo",
+    "game": { "platform": "steam", "storeId": "1475810" },
+    "features": ["Save backup", "Guided resource value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "high-on-life-local",
+    "name": "High On Life",
+    "game": { "platform": "steam", "storeId": "1583230" },
+    "features": ["Save backup", "Guided currency value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "octopath-traveler-local",
+    "name": "OCTOPATH TRAVELER",
+    "game": { "platform": "steam", "storeId": "921570" },
+    "features": ["Save backup", "Guided leaves value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "octopath-traveler-ii-local",
+    "name": "OCTOPATH TRAVELER II",
+    "game": { "platform": "steam", "storeId": "1971650" },
+    "features": ["Save backup", "Guided leaves value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "persona-3-reload-local",
+    "name": "Persona 3 Reload",
+    "game": { "platform": "steam", "storeId": "2161700" },
+    "features": ["Save backup", "Guided money value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "silent-hill-2-local",
+    "name": "SILENT HILL 2",
+    "game": { "platform": "steam", "storeId": "2124490" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "silent-hill-f-local",
+    "name": "SILENT HILL f",
+    "game": { "platform": "steam", "storeId": "2947440" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "starfield-local",
+    "name": "Starfield",
+    "game": { "platform": "steam", "storeId": "1716740" },
+    "features": ["Save backup", "Guided credits value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "still-wakes-the-deep-local",
+    "name": "Still Wakes the Deep",
+    "game": { "platform": "steam", "storeId": "1622910" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "oblivion-remastered-local",
+    "name": "The Elder Scrolls IV: Oblivion Remastered",
+    "game": { "platform": "steam", "storeId": "2623190" },
+    "features": ["Save backup", "Guided gold value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "the-midnight-walk-local",
+    "name": "The Midnight Walk",
+    "game": { "platform": "steam", "storeId": "2863640" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "ai2u-local",
+    "name": "AI2U: With You 'Til The End",
+    "game": { "platform": "steam", "storeId": "2880730" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "aila-local",
+    "name": "AILA",
+    "game": { "platform": "steam", "storeId": "2695430" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "dead-as-disco-local",
+    "name": "Dead as Disco",
+    "game": { "platform": "steam", "storeId": "3404260" },
+    "features": ["Save backup", "Guided score value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "happys-humble-burger-farm-local",
+    "name": "Happy's Humble Burger Farm",
+    "game": { "platform": "steam", "storeId": "1433340" },
+    "features": ["Save backup", "Guided money value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "low-budget-repairs-local",
+    "name": "Low-Budget Repairs",
+    "game": { "platform": "steam", "storeId": "3167920" },
+    "features": ["Save backup", "Guided cash value draft", "Guided part quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "no-im-not-a-human-local",
+    "name": "No, I'm not a Human",
+    "game": { "platform": "steam", "storeId": "3180070" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "shift-at-midnight-local",
+    "name": "Shift At Midnight",
+    "game": { "platform": "steam", "storeId": "3722330" },
+    "features": ["Save backup", "Guided local value draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft" }
+  },
+  {
+    "id": "avatar-frontiers-of-pandora-offline-local",
+    "name": "Avatar: Frontiers of Pandora (offline singleplayer)",
+    "game": { "platform": "steam", "storeId": "2840770" },
+    "features": ["Save backup", "Guided resource value draft", "Guided item quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft", "modeGate": "offline-singleplayer-confirmation-required" }
+  },
+  {
+    "id": "mount-blade-bannerlord-offline-local",
+    "name": "Mount & Blade II: Bannerlord (offline singleplayer)",
+    "game": { "platform": "steam", "storeId": "261550" },
+    "features": ["Save backup", "Guided denars value draft", "Guided party resource draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft", "modeGate": "offline-singleplayer-confirmation-required" }
+  },
+  {
+    "id": "tropico-6-offline-local",
+    "name": "Tropico 6 (offline singleplayer)",
+    "game": { "platform": "steam", "storeId": "492720" },
+    "features": ["Save backup", "Guided treasury value draft", "Guided resource quantity draft"],
+    "safety": { "singleplayerOnly": true, "offlineOnly": true, "multiplayerBlocked": true, "execution": "user-guided-local-draft", "modeGate": "offline-singleplayer-confirmation-required" }
+  }
+]

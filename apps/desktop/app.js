@@ -1,4 +1,5 @@
 const registry = window.SOLOFORGE_REGISTRY || { sources: [], games: [] };
+const offlineProfiles = registry.offlineProfiles || [];
 
 const state = {
   view: "dashboard",
@@ -53,6 +54,21 @@ function statusPill(status) {
   if (status === "approved" || status === "safe") return `<span class="pill pill-ok">${escapeHtml(status)}</span>`;
   if (status === "blocked") return `<span class="pill block">blocked</span>`;
   return `<span class="pill pill-warn">review</span>`;
+}
+
+function offlineProfileFor(game) {
+  const launcher = String(game.launcher || "steam").toLowerCase();
+  const storeId = String(game.storeId || game.appid || "");
+  return offlineProfiles.find(
+    (profile) => profile.game?.platform === launcher && String(profile.game?.storeId) === storeId,
+  );
+}
+
+function eligibleProfiles() {
+  const installed = state.installedScan?.games || [];
+  return installed
+    .map((game) => ({ game, profile: offlineProfileFor(game) }))
+    .filter(({ profile }) => profile);
 }
 
 function sourceHost(url) {
@@ -166,7 +182,7 @@ function renderInstalled() {
   const scan = state.installedScan;
   const games = scan?.games || [];
   const matched = games.filter((game) => game.match).length;
-  const playable = games.filter((game) => game.availableFeatures?.length).length;
+  const playable = games.filter((game) => offlineProfileFor(game)).length;
   const libraries = scan?.libraries?.length || 0;
 
   $("#installed-metrics").innerHTML = [
@@ -201,7 +217,10 @@ function renderInstalled() {
 
   $("#installed-list").innerHTML = visibleGames
     .map((game) => {
-      const featureText = game.availableFeatures?.length ? game.availableFeatures.join(", ") : "Review needed";
+      const profile = offlineProfileFor(game);
+      const featureText = profile
+        ? `${profile.features.join(", ")}${profile.safety?.modeGate ? " (offline confirmation required)" : ""}`
+        : "Blocked until mode review";
       const launcher = game.launcher || "steam";
       const idLabel = launcher === "steam" ? "Steam AppID" : `${launcher} ID`;
       const storeId = game.storeId || game.appid || "unknown";
@@ -212,7 +231,7 @@ function renderInstalled() {
             <strong>${escapeHtml(game.name)}</strong>
             <span>${escapeHtml(idLabel)} ${escapeHtml(storeId)}</span>
           </div>
-          <div>${game.match ? statusPill(reviewStatus) : statusPill("requiresManualReview")}</div>
+          <div>${profile ? statusPill("approved") : statusPill("blocked")}</div>
           <div><span>${escapeHtml(featureText)}</span></div>
         </article>
       `;
@@ -231,6 +250,7 @@ async function importInstalledScan(file) {
     state.installedScan = scan;
     $("#installed-status").textContent = `Imported scan: ${scan.games.length} game(s), ${scan.libraries.length} library location(s).`;
     renderInstalled();
+    renderBuilderSelect();
   } catch (error) {
     $("#installed-list").innerHTML = `
       <div class="panel">
@@ -288,12 +308,16 @@ function handleNativeScan(event) {
   state.installedScan = event.detail.payload;
   $("#installed-status").textContent = `Scan complete: ${state.installedScan.games.length} game(s), ${state.installedScan.libraries.length} library location(s).`;
   renderInstalled();
+  renderBuilderSelect();
 }
 
 function renderBuilderSelect() {
+  const profiles = eligibleProfiles();
   $("#builder-game").innerHTML = [
-    `<option value="">Custom offline game</option>`,
-    ...registry.games.map((game) => `<option value="${escapeHtml(game.id)}">${escapeHtml(game.name)}</option>`),
+    `<option value="">Select an approved installed game</option>`,
+    ...profiles.map(
+      ({ profile }) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.name)}</option>`,
+    ),
   ].join("");
 }
 
@@ -312,11 +336,19 @@ function makeCandidates(value, valueType) {
 }
 
 function firstScan() {
+  if (!offlineProfiles.find((profile) => profile.id === $("#builder-game").value)) {
+    $("#scan-status").textContent = "Blocked: select an approved offline profile first.";
+    return;
+  }
+  if (!$("#offline-confirmation").checked) {
+    $("#scan-status").textContent = "Blocked: confirm an offline singleplayer session first.";
+    return;
+  }
   const value = $("#scan-value").value;
   const valueType = $("#value-type").value;
   state.candidates = makeCandidates(value, valueType);
   state.narrowed = false;
-  $("#scan-status").textContent = `${state.candidates.length} candidates`;
+  $("#scan-status").textContent = `${state.candidates.length} draft candidates (no process is attached)`;
   renderCandidates();
 }
 
@@ -340,27 +372,27 @@ function narrowScan() {
 }
 
 function saveDraft() {
-  const gameId = $("#builder-game").value;
-  const game = registry.games.find((item) => item.id === gameId);
-  const customName = $("#custom-game").value.trim();
-  const strictlyMultiplayer = $("#custom-multiplayer").checked;
-  if (strictlyMultiplayer) {
-    $("#scan-status").textContent = "Blocked: strictly multiplayer games are outside SoloForge.";
+  const profile = offlineProfiles.find((item) => item.id === $("#builder-game").value);
+  if (!profile) {
+    $("#scan-status").textContent = "Blocked: only approved offline profiles can create drafts.";
     return;
   }
-  if (!game && !customName) {
-    $("#scan-status").textContent = "Choose a registry game or enter a custom singleplayer game.";
+  if (!$("#offline-confirmation").checked) {
+    $("#scan-status").textContent = "Blocked: confirm an offline singleplayer session first.";
     return;
   }
   const draft = {
     name: "Local Value Editor",
-    gameId: gameId || null,
-    gameName: game?.name || customName,
+    gameId: profile.id,
+    gameName: profile.name,
     offlineOnly: true,
     singleplayerOnly: true,
     multiplayerBlocked: true,
     achievementCompatibility: "neutral-by-policy",
     storage: "local-only",
+    execution: profile.safety.execution,
+    offlineConfirmedAt: new Date().toISOString(),
+    features: profile.features,
     valueType: $("#value-type").value,
     candidates: state.candidates.slice(0, 4),
     savedAt: new Date().toISOString(),

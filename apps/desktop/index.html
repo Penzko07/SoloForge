@@ -117,21 +117,13 @@
         <section id="builder-view" class="view" aria-labelledby="builder-heading">
           <div class="section-head">
             <h3 id="builder-heading">Trainer Builder</h3>
-            <span class="pill pill-warn">Draft mode</span>
+            <span class="pill pill-warn">Offline draft mode</span>
           </div>
           <div class="builder">
             <section class="builder-step">
               <label>
-                Game
+                Offline profile
                 <select id="builder-game"></select>
-              </label>
-              <label>
-                Custom game
-                <input id="custom-game" type="text" placeholder="Optional singleplayer game name">
-              </label>
-              <label class="check-row">
-                <input id="custom-multiplayer" type="checkbox">
-                Strictly multiplayer
               </label>
               <label>
                 Value type
@@ -145,7 +137,11 @@
                 Current value
                 <input id="scan-value" type="number" value="1240">
               </label>
-              <button id="first-scan" class="primary">First scan</button>
+              <label class="check-row">
+                <input id="offline-confirmation" type="checkbox">
+                I confirm this is an offline singleplayer session
+              </label>
+              <button id="first-scan" class="primary">Create draft scan</button>
             </section>
 
             <section class="builder-step">
@@ -154,8 +150,8 @@
                 <input id="changed-value" type="number" value="1190">
               </label>
               <button id="narrow-scan">Narrow</button>
-              <button id="save-draft">Save draft</button>
-              <output id="scan-status">Waiting for scan</output>
+              <button id="save-draft">Save offline draft</button>
+              <output id="scan-status">Select an approved local profile</output>
             </section>
 
             <section class="candidate-panel">

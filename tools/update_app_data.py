@@ -15,7 +15,8 @@ def load_records(pattern: str) -> list[dict]:
     records = []
     for path in sorted(REGISTRY_DIR.glob(pattern)):
         with path.open("r", encoding="utf-8") as handle:
-            records.append(json.load(handle))
+            payload = json.load(handle)
+            records.extend(payload if isinstance(payload, list) else [payload])
     return records
 
 
@@ -25,6 +26,7 @@ def main() -> int:
         "schemaVersion": "0.1.0",
         "sources": load_records("sources/*.json"),
         "games": load_records("games/*.json"),
+        "offlineProfiles": load_records("offline-profiles/*.json"),
     }
     serialized = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     APP_DATA.write_text(

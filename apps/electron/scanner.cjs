@@ -33,8 +33,9 @@ function readText(target) {
 function unique(values) {
   const seen = new Set();
   return values.filter((value) => {
-    if (!value || seen.has(value)) return false;
-    seen.add(value);
+    const key = process.platform === "win32" ? String(value).toLowerCase() : value;
+    if (!value || seen.has(key)) return false;
+    seen.add(key);
     return true;
   });
 }
@@ -422,7 +423,8 @@ function scanManifestLauncher(launcher, registryGames) {
 function dedupeGames(games) {
   const seen = new Set();
   return games.filter((game) => {
-    const key = [game.launcher, game.storeId || normalizeTitle(game.name), game.installDir || ""].join(":");
+    const installDir = process.platform === "win32" ? String(game.installDir || "").toLowerCase() : game.installDir || "";
+    const key = [game.launcher, game.storeId || normalizeTitle(game.name), installDir].join(":");
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
