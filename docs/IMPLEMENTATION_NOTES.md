@@ -30,7 +30,7 @@ The UI supports:
 - source attribution
 - installed-game scan import
 - native scan bridge for Electron and macOS
-- mock trainer-builder flow
+- Windows native trainer runtime with browser preview fallback
 - offline/singleplayer safety messaging
 
 ## Windows/Linux App
@@ -38,6 +38,11 @@ The UI supports:
 The Windows and Linux builds use Electron. The app loads the shared desktop UI and exposes a narrow `window.soloforgeNative.scanInstalledGames()` bridge from `apps/electron/preload.cjs`.
 
 The bridge calls `apps/electron/scanner.cjs`, a dependency-free Node scanner that reads launcher metadata from local files and common mounted-drive locations.
+
+The trainer bridge calls `apps/electron/trainer-runtime.cjs`. On Windows it
+delegates process memory work to `apps/electron/windows-memory-helper.ps1` for
+exact-value scan, changed-value narrowing, and selected-address writes. On other
+platforms it reports preview mode.
 
 Build commands:
 

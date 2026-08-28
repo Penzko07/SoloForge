@@ -8,6 +8,10 @@ const state = {
   narrowed: false,
   installedScan: null,
   nativeScanActive: false,
+  trainerRuntime: null,
+  trainerProcesses: [],
+  nativeCandidates: false,
+  selectedCandidateAddress: null,
 };
 
 const viewTitles = {
@@ -290,6 +294,108 @@ function handleNativeScan(event) {
   renderInstalled();
 }
 
+function currentBuilderGame() {
+  const gameId = $("#builder-game").value;
+  return registry.games.find((item) => item.id === gameId) || null;
+}
+
+function trainerRuntimeAvailable() {
+  return Boolean(state.trainerRuntime?.available && window.soloforgeNative?.firstTrainerScan);
+}
+
+function renderRuntimeStatus(message) {
+  const pill = $("#runtime-pill");
+  const status = $("#runtime-status");
+  if (!pill || !status) return;
+
+  if (trainerRuntimeAvailable()) {
+    pill.textContent = "Windows native";
+    pill.className = "pill pill-ok";
+    status.textContent = message || "Native Windows memory scanner ready.";
+    return;
+  }
+
+  const platform = window.soloforgeNative?.platform || "browser";
+  pill.textContent = "Preview mode";
+  pill.className = "pill pill-warn";
+  status.textContent = message || `Native memory scanning is not active on ${platform}.`;
+}
+
+function processLabel(process) {
+  const title = process.title ? ` - ${process.title}` : "";
+  return `${process.name}.exe (${process.pid})${title}`;
+}
+
+function executableHintsForSelectedGame() {
+  const game = currentBuilderGame();
+  return (game?.game?.executables || []).map((item) => String(item.processName || "").toLowerCase()).filter(Boolean);
+}
+
+function renderTrainerProcesses() {
+  const select = $("#trainer-process");
+  if (!select) return;
+  const hints = executableHintsForSelectedGame();
+  const scored = state.trainerProcesses
+    .map((process) => ({
+      ...process,
+      suggested: hints.includes(`${String(process.name).toLowerCase()}.exe`) || hints.includes(String(process.name).toLowerCase()),
+    }))
+    .sort((a, b) => Number(b.suggested) - Number(a.suggested) || String(a.name).localeCompare(String(b.name)));
+
+  select.innerHTML = [
+    `<option value="">Select running game process</option>`,
+    ...scored.slice(0, 160).map((process) => {
+      const prefix = process.suggested ? "Suggested: " : "";
+      return `<option value="${escapeHtml(process.pid)}">${escapeHtml(prefix + processLabel(process))}</option>`;
+    }),
+  ].join("");
+}
+
+async function initTrainerRuntime() {
+  if (!window.soloforgeNative?.trainerRuntimeStatus) {
+    renderRuntimeStatus("Browser preview uses simulated candidates only.");
+    renderTrainerProcesses();
+    return;
+  }
+  const response = await window.soloforgeNative.trainerRuntimeStatus();
+  if (!response.ok) {
+    renderRuntimeStatus(response.error || "Native runtime check failed.");
+    return;
+  }
+  state.trainerRuntime = response.payload;
+  renderRuntimeStatus();
+  if (trainerRuntimeAvailable()) refreshTrainerProcesses();
+}
+
+async function refreshTrainerProcesses() {
+  if (!window.soloforgeNative?.listTrainerProcesses) {
+    renderRuntimeStatus("Process listing is available in the Windows desktop app.");
+    renderTrainerProcesses();
+    return;
+  }
+  renderRuntimeStatus("Refreshing running processes...");
+  const response = await window.soloforgeNative.listTrainerProcesses();
+  if (!response.ok) {
+    renderRuntimeStatus(response.error || "Could not list processes.");
+    return;
+  }
+  state.trainerProcesses = response.payload?.processes || [];
+  renderTrainerProcesses();
+  renderRuntimeStatus(`${state.trainerProcesses.length} process(es) available.`);
+}
+
+function trainerRequestBase() {
+  const game = currentBuilderGame();
+  return {
+    gameId: game?.id || null,
+    customGameName: $("#custom-game").value.trim(),
+    strictlyMultiplayer: $("#custom-multiplayer").checked,
+    userConfirmedOffline: $("#offline-confirm").checked,
+    pid: Number($("#trainer-process").value),
+    valueType: $("#value-type").value,
+  };
+}
+
 function renderBuilderSelect() {
   $("#builder-game").innerHTML = [
     `<option value="">Custom offline game</option>`,
@@ -314,9 +420,45 @@ function makeCandidates(value, valueType) {
 function firstScan() {
   const value = $("#scan-value").value;
   const valueType = $("#value-type").value;
+  if (trainerRuntimeAvailable()) {
+    nativeFirstScan(value, valueType);
+    return;
+  }
   state.candidates = makeCandidates(value, valueType);
   state.narrowed = false;
-  $("#scan-status").textContent = `${state.candidates.length} candidates`;
+  state.nativeCandidates = false;
+  state.selectedCandidateAddress = null;
+  $("#scan-status").textContent = `${state.candidates.length} simulated candidates`;
+  renderRuntimeStatus("Preview simulation only. Use the Windows app for real memory scanning.");
+  renderCandidates();
+}
+
+async function nativeFirstScan(value, valueType) {
+  const request = {
+    ...trainerRequestBase(),
+    value,
+    valueType,
+  };
+  if (!request.userConfirmedOffline) {
+    $("#scan-status").textContent = "Confirm offline singleplayer mode.";
+    return;
+  }
+  if (!request.pid) {
+    $("#scan-status").textContent = "Select the running game process.";
+    return;
+  }
+  $("#scan-status").textContent = "Scanning process memory...";
+  const response = await window.soloforgeNative.firstTrainerScan(request);
+  if (!response.ok) {
+    $("#scan-status").textContent = response.error || "Native scan failed.";
+    return;
+  }
+  state.candidates = response.payload?.candidates || [];
+  state.nativeCandidates = true;
+  state.narrowed = false;
+  state.selectedCandidateAddress = state.candidates[0]?.address || null;
+  $("#scan-status").textContent = `${state.candidates.length} native candidates`;
+  renderRuntimeStatus("Native scan completed.");
   renderCandidates();
 }
 
@@ -327,6 +469,10 @@ function narrowScan() {
   }
 
   const changed = Number($("#changed-value").value) || 0;
+  if (state.nativeCandidates && trainerRuntimeAvailable()) {
+    nativeNarrowScan(changed);
+    return;
+  }
   state.candidates = state.candidates
     .filter((candidate, index) => index % 5 === 0 || index % 13 === 0)
     .map((candidate, index) => ({
@@ -337,6 +483,60 @@ function narrowScan() {
   state.narrowed = true;
   $("#scan-status").textContent = `${state.candidates.length} candidates`;
   renderCandidates();
+}
+
+async function nativeNarrowScan(changed) {
+  const request = {
+    ...trainerRequestBase(),
+    value: String(changed),
+    candidates: state.candidates,
+  };
+  if (!request.userConfirmedOffline) {
+    $("#scan-status").textContent = "Confirm offline singleplayer mode.";
+    return;
+  }
+  if (!request.pid) {
+    $("#scan-status").textContent = "Select the running game process.";
+    return;
+  }
+  $("#scan-status").textContent = "Reading candidate addresses...";
+  const response = await window.soloforgeNative.narrowTrainerScan(request);
+  if (!response.ok) {
+    $("#scan-status").textContent = response.error || "Native narrow failed.";
+    return;
+  }
+  state.candidates = response.payload?.candidates || [];
+  state.narrowed = true;
+  state.selectedCandidateAddress = state.candidates[0]?.address || null;
+  $("#scan-status").textContent = `${state.candidates.length} native candidates`;
+  renderCandidates();
+}
+
+async function writeSelectedValue() {
+  if (!trainerRuntimeAvailable() || !state.nativeCandidates) {
+    $("#scan-status").textContent = "Real writes require native Windows candidates.";
+    return;
+  }
+  if (!state.selectedCandidateAddress) {
+    $("#scan-status").textContent = "Select one candidate address.";
+    return;
+  }
+  const request = {
+    ...trainerRequestBase(),
+    value: $("#changed-value").value,
+    address: state.selectedCandidateAddress,
+  };
+  if (!request.userConfirmedOffline) {
+    $("#scan-status").textContent = "Confirm offline singleplayer mode.";
+    return;
+  }
+  $("#scan-status").textContent = "Writing selected value...";
+  const response = await window.soloforgeNative.writeTrainerValue(request);
+  if (!response.ok || !response.payload?.written) {
+    $("#scan-status").textContent = response.error || "Write failed.";
+    return;
+  }
+  $("#scan-status").textContent = `Wrote ${request.value} to ${state.selectedCandidateAddress}`;
 }
 
 function saveDraft() {
@@ -361,8 +561,10 @@ function saveDraft() {
     multiplayerBlocked: true,
     achievementCompatibility: "neutral-by-policy",
     storage: "local-only",
+    executionMode: state.nativeCandidates ? "native-memory" : "simulation-draft",
     valueType: $("#value-type").value,
     candidates: state.candidates.slice(0, 4),
+    selectedCandidateAddress: state.selectedCandidateAddress,
     savedAt: new Date().toISOString(),
   };
   const existing = JSON.parse(localStorage.getItem("soloforgeDrafts") || "[]");
@@ -377,9 +579,10 @@ function renderCandidates() {
     .slice(0, 20)
     .map(
       (candidate) => `
-        <div class="candidate">
+        <div class="candidate ${candidate.address === state.selectedCandidateAddress ? "is-selected" : ""}">
           <div><strong>${escapeHtml(candidate.address)}</strong><br>${escapeHtml(candidate.type)}</div>
           <span>${escapeHtml(candidate.value)}</span>
+          <button class="candidate-select" data-address="${escapeHtml(candidate.address)}">Select</button>
         </div>
       `,
     )
@@ -431,10 +634,22 @@ function bindEvents() {
   $("#native-scan").addEventListener("click", requestNativeScan);
   window.addEventListener("soloforge-native-scan", handleNativeScan);
 
+  $("#builder-game").addEventListener("change", renderTrainerProcesses);
+  $("#refresh-processes").addEventListener("click", refreshTrainerProcesses);
   $("#first-scan").addEventListener("click", firstScan);
   $("#narrow-scan").addEventListener("click", narrowScan);
+  $("#write-value").addEventListener("click", writeSelectedValue);
   $("#save-draft").addEventListener("click", saveDraft);
+  $("#candidate-list").addEventListener("click", (event) => {
+    const button = event.target.closest(".candidate-select");
+    if (!button) return;
+    state.selectedCandidateAddress = button.dataset.address;
+    renderCandidates();
+  });
 }
 
 bindEvents();
 renderAll();
+initTrainerRuntime().catch((error) => {
+  renderRuntimeStatus(error.message || "Native runtime unavailable.");
+});

@@ -117,7 +117,7 @@
         <section id="builder-view" class="view" aria-labelledby="builder-heading">
           <div class="section-head">
             <h3 id="builder-heading">Trainer Builder</h3>
-            <span class="pill pill-warn">Draft mode</span>
+            <span id="runtime-pill" class="pill pill-warn">Runtime checking</span>
           </div>
           <div class="builder">
             <section class="builder-step">
@@ -132,6 +132,15 @@
               <label class="check-row">
                 <input id="custom-multiplayer" type="checkbox">
                 Strictly multiplayer
+              </label>
+              <label>
+                Running process
+                <select id="trainer-process"></select>
+              </label>
+              <button id="refresh-processes">Refresh processes</button>
+              <label class="check-row">
+                <input id="offline-confirm" type="checkbox">
+                Offline singleplayer
               </label>
               <label>
                 Value type
@@ -154,7 +163,9 @@
                 <input id="changed-value" type="number" value="1190">
               </label>
               <button id="narrow-scan">Narrow</button>
+              <button id="write-value">Write selected value</button>
               <button id="save-draft">Save draft</button>
+              <output id="runtime-status">Runtime not checked</output>
               <output id="scan-status">Waiting for scan</output>
             </section>
 

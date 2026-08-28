@@ -3,6 +3,7 @@
 const path = require("path");
 const { app, BrowserWindow, ipcMain, shell } = require("electron");
 const { scanInstalledGames } = require("./scanner.cjs");
+const trainerRuntime = require("./trainer-runtime.cjs");
 
 function desktopIndexPath() {
   return path.join(__dirname, "..", "desktop", "index.html");
@@ -47,6 +48,40 @@ ipcMain.handle("soloforge:scan-installed-games", async () => {
     };
   }
 });
+
+async function safeNativeCall(action) {
+  try {
+    return {
+      ok: true,
+      payload: await action(),
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+ipcMain.handle("soloforge:trainer-runtime-status", async () =>
+  safeNativeCall(() => trainerRuntime.trainerRuntimeStatus()),
+);
+
+ipcMain.handle("soloforge:list-trainer-processes", async () =>
+  safeNativeCall(() => trainerRuntime.listTrainerProcesses()),
+);
+
+ipcMain.handle("soloforge:first-trainer-scan", async (_event, request) =>
+  safeNativeCall(() => trainerRuntime.firstTrainerScan(request)),
+);
+
+ipcMain.handle("soloforge:narrow-trainer-scan", async (_event, request) =>
+  safeNativeCall(() => trainerRuntime.narrowTrainerScan(request)),
+);
+
+ipcMain.handle("soloforge:write-trainer-value", async (_event, request) =>
+  safeNativeCall(() => trainerRuntime.writeTrainerValue(request)),
+);
 
 app.whenReady().then(() => {
   createWindow();

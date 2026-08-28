@@ -42,8 +42,22 @@ The Electron app includes a dependency-free Node scanner. It reads local launche
 
 It does not require Python on the gaming PC.
 
+## Native Trainer Runtime
+
+The Windows app also includes a user-guided memory runtime:
+
+- list running processes
+- confirm offline singleplayer mode
+- first exact-value scan
+- changed-value narrowing
+- selected-address write
+
+This is not a fixed-offset trainer database. For Persona 3 Reload, SoloForge
+knows the Steam AppID and `P3R.exe` process hint, but the user still scans the
+current Yen, HP, SP, or item value in their own offline session.
+
 ## Safety Boundary
 
 SoloForge only marks a detected game as eligible when the registry entry is offline singleplayer and multiplayer-blocked. Unknown games can still be used for local drafts, but strictly multiplayer games must remain blocked.
 
-The app does not attach to processes yet. The current trainer builder stores local drafts for the reviewed helper that will come later.
+The app does not include anti-cheat bypasses, stealth injection, DRM bypasses, multiplayer support, or achievement spoofing.

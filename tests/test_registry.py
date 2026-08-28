@@ -38,6 +38,7 @@ class RegistryTests(unittest.TestCase):
         persona = next((game for game in payload["games"] if game["id"] == "persona-3-reload"), None)
         self.assertIsNotNone(persona)
         self.assertEqual(persona["game"]["storeIds"]["steam"], "2161700")
+        self.assertEqual(persona["game"]["executables"][0]["processName"], "P3R.exe")
 
     def test_all_game_features_are_offline_only(self) -> None:
         for path in sorted((ROOT / "registry" / "games").glob("*.json")):

@@ -21,7 +21,8 @@ SoloForge is built with AI assistance from OpenAI Codex. The project attributes 
 - GitHub API publish helper for machines where normal `git push` has no HTTPS credentials
 - GitHub metadata importer scaffold
 - GitHub Actions workflow for registry checks and desktop package artifacts
-- mock trainer-builder flow that models value scanning and custom singleplayer drafts without attaching to real processes
+- Windows native trainer runtime for user-guided memory scan/narrow/write flows
+- browser/macOS trainer-builder preview for custom singleplayer drafts
 
 SoloForge is not code-signed by a commercial certificate yet. Windows and Linux
 packages are built by GitHub Actions. The original browser UI and local macOS
@@ -180,8 +181,13 @@ The builder can save local draft cheat definitions for:
 Drafts are always marked offline-only and singleplayer-only. If a game is
 strictly multiplayer, the builder blocks the draft.
 
-The current builder is still a mock value scanner; it does not attach to real
-processes yet. A future native helper must keep the same safety gates.
+The Windows Electron app can list running processes, perform exact-value scans,
+narrow candidate addresses after an in-game value changes, and write the chosen
+value. Browser and macOS builds keep a preview simulation so the workflow can be
+reviewed without attaching to a process.
+
+The native runtime is user-guided. It does not include fixed offsets, anti-cheat
+bypasses, stealth behavior, or multiplayer support.
 
 ## Achievements
 

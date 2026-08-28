@@ -15,6 +15,7 @@ Windows/Linux Electron App
   wraps the desktop UI in Chromium
   bundles registry metadata and a dependency-free Node scanner
   exposes a narrow IPC bridge for installed-game scanning
+  exposes a Windows-only IPC bridge for user-guided memory scanning/writing
 
 macOS App
   wraps the desktop UI in WebKit as a lightweight local build
@@ -43,9 +44,12 @@ Safety Policy
 
 ## Trainer Builder
 
-The first milestone includes a mock scanner so the user flow can be designed without attaching to a process. It supports known registry games and custom singleplayer game drafts. Strictly multiplayer targets are blocked.
+The Windows Electron build includes a native exact-value scan/narrow/write path.
+It supports known registry games and custom singleplayer game drafts. Strictly
+multiplayer targets are blocked. Browser and macOS builds keep a simulation
+preview.
 
-A future native helper should be separate from the UI and must implement these gates:
+The native helper is separate from the UI and must keep these gates:
 
 - explicit user confirmation
 - offline singleplayer process selection

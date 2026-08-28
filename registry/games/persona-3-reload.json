@@ -15,7 +15,14 @@
     "platforms": ["steam"],
     "storeIds": {
       "steam": "2161700"
-    }
+    },
+    "executables": [
+      {
+        "platform": "windows",
+        "path": "P3R/Binaries/Win64/P3R.exe",
+        "processName": "P3R.exe"
+      }
+    ]
   },
   "features": [
     {

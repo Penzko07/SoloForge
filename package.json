@@ -9,7 +9,7 @@
   "scripts": {
     "start": "electron .",
     "build:app-data": "python tools/update_app_data.py",
-    "check:js": "node --check apps/desktop/app.js && node --check apps/electron/main.cjs && node --check apps/electron/preload.cjs && node --check apps/electron/scanner.cjs",
+    "check:js": "node --check apps/desktop/app.js && node --check apps/electron/main.cjs && node --check apps/electron/preload.cjs && node --check apps/electron/scanner.cjs && node --check apps/electron/trainer-runtime.cjs",
     "dist:win": "npm run build:app-data && electron-builder --win nsis portable",
     "dist:linux": "npm run build:app-data && electron-builder --linux AppImage deb"
   },

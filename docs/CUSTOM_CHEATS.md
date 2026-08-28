@@ -4,12 +4,16 @@ SoloForge should let players make their own local cheat definitions for offline 
 
 ## Current Behavior
 
-The desktop app supports local draft creation:
+The desktop app supports local draft creation. On Windows, the Electron app can
+also run a native exact-value memory workflow:
 
 - choose a known registry game or enter a custom singleplayer game name
+- choose the running game process
+- confirm offline singleplayer mode
 - choose a value type
-- run a mock first scan
+- run a first scan
 - narrow candidates with a changed value
+- write the selected changed value on Windows
 - save a local draft in browser/app storage
 
 Drafts are marked:
@@ -27,10 +31,9 @@ This is intentionally simple: if the game is built only for multiplayer or onlin
 
 ## Future Native Helper
 
-Real memory editing should live in a separate reviewed helper. Before that helper can write values, it must support:
+The current Windows helper is intentionally narrow. Future versions should add:
 
-- explicit user confirmation
-- offline singleplayer process selection
+- better process-to-game matching
 - save/config backups before file writes
 - visible attribution for imported sources
 - a blocked state for multiplayer and online contexts

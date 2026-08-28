@@ -38,6 +38,7 @@ jobs:
           node --check apps/electron/main.cjs
           node --check apps/electron/preload.cjs
           node --check apps/electron/scanner.cjs
+          node --check apps/electron/trainer-runtime.cjs
 
       - name: Verify generated desktop data
         run: |
