@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "persona-3-reload",
+  "kind": "game",
+  "name": "Persona 3 Reload",
+  "source": {
+    "name": "SoloForge original template / Steam store",
+    "url": "https://store.steampowered.com/app/2161700/Persona_3_Reload/",
+    "importMode": "metadata-only",
+    "license": "CC BY 4.0",
+    "lastChecked": "2026-08-28"
+  },
+  "game": {
+    "title": "Persona 3 Reload",
+    "platforms": ["steam"],
+    "storeIds": {
+      "steam": "2161700"
+    }
+  },
+  "features": [
+    {
+      "name": "Yen value finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for narrowing the current money value in an offline singleplayer save."
+    },
+    {
+      "name": "HP and SP value finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for party HP and SP values during offline singleplayer play."
+    },
+    {
+      "name": "Item quantity finder",
+      "type": "memory-scan",
+      "offlineOnly": true,
+      "safetyStatus": "requiresManualReview",
+      "notes": "Draft template for consumable, material, and shard quantities in offline play."
+    },
+    {
+      "name": "Save backup before tuning",
+      "type": "save-tool",
+      "offlineOnly": true,
+      "safetyStatus": "safe",
+      "notes": "Create a local save backup before any manual table or value-editing work."
+    }
+  ],
+  "safety": {
+    "singleplayerOnly": true,
+    "offlineOnly": true,
+    "multiplayerBlocked": true,
+    "reviewStatus": "requiresManualReview"
+  },
+  "attribution": {
+    "required": false,
+    "text": "Original SoloForge draft template. Game identity and Steam AppID reference the official Steam store page."
+  }
+}

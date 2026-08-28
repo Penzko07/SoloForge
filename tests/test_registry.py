@@ -31,6 +31,14 @@ class RegistryTests(unittest.TestCase):
         self.assertGreaterEqual(len(payload["sources"]), 2)
         self.assertGreaterEqual(len(payload["games"]), 1)
 
+    def test_persona_3_reload_is_available_for_steam_matching(self) -> None:
+        app_data = ROOT / "apps" / "desktop" / "app-data.js"
+        raw = app_data.read_text(encoding="utf-8")
+        payload = json.loads(raw.removeprefix("window.SOLOFORGE_REGISTRY = ").rstrip(";\n"))
+        persona = next((game for game in payload["games"] if game["id"] == "persona-3-reload"), None)
+        self.assertIsNotNone(persona)
+        self.assertEqual(persona["game"]["storeIds"]["steam"], "2161700")
+
     def test_all_game_features_are_offline_only(self) -> None:
         for path in sorted((ROOT / "registry" / "games").glob("*.json")):
             record = json.loads(path.read_text(encoding="utf-8"))
