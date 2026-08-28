@@ -8,8 +8,7 @@ Every push to `main` runs the `Validate` workflow. When it completes, open the w
 
 The Linux artifact contains:
 
-- AppImage
-- Debian package
+- a compressed `tar.gz` desktop package
 
 Tagged releases also attach Linux builds to the GitHub Release page.
 
